@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="tramSky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E0F2FE"/>
+      <stop offset="100%" stop-color="#BAE6FD"/>
+    </linearGradient>
+    <linearGradient id="tramBody" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#DC2626"/>
+      <stop offset="25%" stop-color="#B91C1C"/>
+      <stop offset="100%" stop-color="#991B1B"/>
+    </linearGradient>
+    <linearGradient id="silverTrim" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#94A3B8"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#tramSky)"/>
+
+  <!-- King William St sandstone buildings backdrop -->
+  <rect x="50" y="80" width="180" height="230" fill="#E2D4B7"/>
+  <rect x="70" y="110" width="25" height="40" fill="#8C7A5B" rx="3"/>
+  <rect x="110" y="110" width="25" height="40" fill="#8C7A5B" rx="3"/>
+  <rect x="150" y="110" width="25" height="40" fill="#8C7A5B" rx="3"/>
+  <rect x="70" y="170" width="25" height="40" fill="#8C7A5B" rx="3"/>
+  <rect x="110" y="170" width="25" height="40" fill="#8C7A5B" rx="3"/>
+  <rect x="150" y="170" width="25" height="40" fill="#8C7A5B" rx="3"/>
+
+  <rect x="250" y="120" width="200" height="190" fill="#D4C3A3"/>
+  <rect x="470" y="90" width="260" height="220" fill="#EDE4CE"/>
+
+  <!-- Overhead Tram Electrical Wires -->
+  <line x1="0" y1="140" x2="800" y2="140" stroke="#475569" stroke-width="2"/>
+  <line x1="0" y1="165" x2="800" y2="165" stroke="#64748B" stroke-width="1.5"/>
+  <line x1="200" y1="140" x2="200" y2="350" stroke="#334155" stroke-width="4"/>
+  <line x1="650" y1="140" x2="650" y2="350" stroke="#334155" stroke-width="4"/>
+
+  <!-- Tram Street Track -->
+  <rect x="0" y="340" width="800" height="110" fill="#64748B"/>
+  <line x1="0" y1="365" x2="800" y2="365" stroke="#CBD5E1" stroke-width="4"/>
+  <line x1="0" y1="385" x2="800" y2="385" stroke="#CBD5E1" stroke-width="4"/>
+
+  <!-- Adelaide Flexity Tram -->
+  <!-- Pantograph -->
+  <polyline points="400,165 380,185 410,210 395,225" stroke="#1E293B" stroke-width="5" fill="none"/>
+  <line x1="365" y1="165" x2="435" y2="165" stroke="#0F172A" stroke-width="6"/>
+
+  <!-- Tram Main Body -->
+  <rect x="120" y="225" width="560" height="135" rx="16" fill="url(#tramBody)"/>
+  <rect x="120" y="225" width="560" height="22" rx="6" fill="#F8FAFC"/>
+  <!-- Silver / Ochre lower trim -->
+  <rect x="120" y="325" width="560" height="25" rx="4" fill="url(#silverTrim)"/>
+  <rect x="120" y="318" width="560" height="7" fill="#F59E0B"/>
+
+  <!-- Destination LED screen -->
+  <rect x="150" y="235" width="100" height="16" rx="3" fill="#0F172A"/>
+  <text x="156" y="247" font-family="monospace" font-size="9" font-weight="bold" fill="#FBBF24">GLENELG</text>
+
+  <!-- Windows -->
+  <rect x="140" y="255" width="80" height="55" rx="8" fill="#0284C7" opacity="0.85"/>
+  <rect x="235" y="255" width="90" height="55" rx="6" fill="#0284C7" opacity="0.85"/>
+  <rect x="340" y="255" width="90" height="55" rx="6" fill="#0284C7" opacity="0.85"/>
+  <rect x="445" y="255" width="90" height="55" rx="6" fill="#0284C7" opacity="0.85"/>
+  <rect x="550" y="255" width="110" height="55" rx="6" fill="#0284C7" opacity="0.85"/>
+
+  <!-- Tram Doors -->
+  <line x1="335" y1="250" x2="335" y2="350" stroke="#0F172A" stroke-width="2"/>
+  <line x1="540" y1="250" x2="540" y2="350" stroke="#0F172A" stroke-width="2"/>
+
+  <!-- Headlights -->
+  <circle cx="140" cy="335" r="7" fill="#FEF08A"/>
+  <circle cx="160" cy="335" r="7" fill="#FEF08A"/>
+  <polygon points="120,335 0,280 0,400" fill="#FEF08A" opacity="0.15"/>
+
+  <!-- Wheels / Bogies -->
+  <rect x="200" y="355" width="90" height="16" rx="4" fill="#0F172A"/>
+  <rect x="490" y="355" width="90" height="16" rx="4" fill="#0F172A"/>
+
+  <!-- Free Tram Zone Sign -->
+  <g transform="translate(620, 260)">
+    <circle cx="25" cy="25" r="22" fill="#15803D" stroke="#FFFFFF" stroke-width="3"/>
+    <text x="25" y="22" font-family="sans-serif" font-size="9" font-weight="bold" fill="#FFFFFF" text-anchor="middle">FREE</text>
+    <text x="25" y="34" font-family="sans-serif" font-size="8" font-weight="bold" fill="#FFFFFF" text-anchor="middle">ZONE</text>
+  </g>
+</svg>

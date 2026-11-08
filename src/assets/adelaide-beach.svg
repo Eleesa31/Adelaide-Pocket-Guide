@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="sunsetSky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7C2D12"/>
+      <stop offset="30%" stop-color="#C2410C"/>
+      <stop offset="65%" stop-color="#F97316"/>
+      <stop offset="90%" stop-color="#FDE047"/>
+      <stop offset="100%" stop-color="#FEF08A"/>
+    </linearGradient>
+    <linearGradient id="seaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0284C7"/>
+      <stop offset="30%" stop-color="#0369A1"/>
+      <stop offset="100%" stop-color="#075985"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Golden Sunset Sky -->
+  <rect width="800" height="450" fill="url(#sunsetSky)"/>
+
+  <!-- Glowing Sun setting into Gulf St Vincent -->
+  <circle cx="480" cy="270" r="60" fill="#FFFBEB" opacity="0.95"/>
+  <circle cx="480" cy="270" r="100" fill="#FEF08A" opacity="0.3"/>
+
+  <!-- Calm Ocean -->
+  <rect x="0" y="270" width="800" height="180" fill="url(#seaGrad)"/>
+
+  <!-- Sun path reflection on water -->
+  <polygon points="460,270 500,270 560,450 400,450" fill="#FDE047" opacity="0.35"/>
+  <line x1="440" y1="285" x2="520" y2="285" stroke="#FFFBEB" stroke-width="2" opacity="0.7"/>
+  <line x1="420" y1="305" x2="540" y2="305" stroke="#FFFBEB" stroke-width="2" opacity="0.6"/>
+  <line x1="400" y1="330" x2="560" y2="330" stroke="#FFFBEB" stroke-width="3" opacity="0.5"/>
+  <line x1="380" y1="365" x2="580" y2="365" stroke="#FFFBEB" stroke-width="3" opacity="0.5"/>
+
+  <!-- Glenelg Timber Jetty Pylons Silhouette -->
+  <!-- Deck -->
+  <rect x="0" y="278" width="600" height="12" fill="#1C1917"/>
+  <rect x="0" y="273" width="600" height="4" fill="#292524"/>
+
+  <!-- Jetty Pilings -->
+  <line x1="60" y1="290" x2="60" y2="390" stroke="#1C1917" stroke-width="8"/>
+  <line x1="120" y1="290" x2="120" y2="390" stroke="#1C1917" stroke-width="8"/>
+  <line x1="180" y1="290" x2="180" y2="390" stroke="#1C1917" stroke-width="8"/>
+  <line x1="240" y1="290" x2="240" y2="390" stroke="#1C1917" stroke-width="8"/>
+  <line x1="300" y1="290" x2="300" y2="390" stroke="#1C1917" stroke-width="8"/>
+  <line x1="360" y1="290" x2="360" y2="390" stroke="#1C1917" stroke-width="8"/>
+  <line x1="420" y1="290" x2="420" y2="390" stroke="#1C1917" stroke-width="8"/>
+  <line x1="480" y1="290" x2="480" y2="390" stroke="#1C1917" stroke-width="8"/>
+  <line x1="540" y1="290" x2="540" y2="390" stroke="#1C1917" stroke-width="8"/>
+  <line x1="595" y1="290" x2="595" y2="390" stroke="#1C1917" stroke-width="10"/>
+
+  <!-- People silhouettes on the Jetty -->
+  <circle cx="280" cy="265" r="4" fill="#0C0A09"/>
+  <rect x="278" y="269" width="4" height="9" fill="#0C0A09"/>
+  <circle cx="290" cy="266" r="3.5" fill="#0C0A09"/>
+  <rect x="288" y="269.5" width="4" height="8.5" fill="#0C0A09"/>
+
+  <circle cx="450" cy="265" r="4" fill="#0C0A09"/>
+  <rect x="448" y="269" width="4" height="9" fill="#0C0A09"/>
+
+  <!-- Wild Dolphin fin in water -->
+  <path d="M 640 330 Q 652 312 660 322 Q 652 334 640 330 Z" fill="#0369A1"/>
+  <ellipse cx="650" cy="331" rx="14" ry="2" fill="#E0F2FE" opacity="0.6"/>
+
+  <!-- Sandy beach foreground right -->
+  <path d="M 500 450 Q 620 400 800 420 L 800 450 Z" fill="#FBBF24" opacity="0.9"/>
+  <path d="M 530 450 Q 640 410 800 430 L 800 450 Z" fill="#D97706"/>
+</svg>
