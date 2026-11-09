@@ -79,31 +79,31 @@ export const FoodView: React.FC<FoodViewProps> = ({
       
       {/* Title & Introduction */}
       <div className="space-y-3">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-100 text-rose-900">
-          <UtensilsCrossed className="w-3.5 h-3.5 text-rose-600" />
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FBF4F1] text-[#B57F6C] border border-[#D0A18F]/40">
+          <UtensilsCrossed className="w-3.5 h-3.5 text-[#B57F6C]" />
           <span>Affordable Dining & Student Deals</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">
+        <h1 className="text-3xl sm:text-4xl font-black text-[#1A2E2C] tracking-tight">
           Food & Cafes: Student-Tested Cheap Eats
         </h1>
-        <p className="text-stone-600 text-sm sm:text-base max-w-3xl leading-relaxed">
+        <p className="text-[#475E5A] text-sm sm:text-base max-w-3xl leading-relaxed">
           From legendary 24/7 bakeries to Chinatown food courts and Gouger Street dumplings. Discover verified meal prices, student ID discounts, and exact transit stops so you can eat well on a budget.
         </p>
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-white border border-stone-200 rounded-2xl p-5 shadow-sm space-y-4">
+      <div className="bg-white border border-[#D4DDD9] rounded-2xl p-5 shadow-xs space-y-4">
         
         {/* Search & Location */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <div className="relative md:col-span-2">
-            <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-3.5" />
+            <Search className="w-4 h-4 text-[#87A09B] absolute left-3.5 top-3.5" />
             <input
               type="text"
               placeholder="Search by restaurant, dish or cuisine (e.g. dumplings, bakery, pizza, roti)..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-stone-200 text-xs sm:text-sm text-stone-900 focus:outline-none focus:border-amber-500 placeholder:text-stone-400"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#D4DDD9] text-xs sm:text-sm text-[#1A2E2C] focus:outline-none focus:border-[#0A868C] placeholder:text-[#87A09B]"
             />
           </div>
 
@@ -111,7 +111,7 @@ export const FoodView: React.FC<FoodViewProps> = ({
             <select
               value={selectedLocation}
               onChange={(e) => setSelectedLocation(e.target.value as LocationArea)}
-              className="w-full px-3 py-2.5 rounded-xl border border-stone-200 text-xs sm:text-sm text-stone-800 bg-white focus:outline-none focus:border-amber-500 cursor-pointer"
+              className="w-full px-3 py-2.5 rounded-xl border border-[#D4DDD9] text-xs sm:text-sm text-[#1A2E2C] bg-white focus:outline-none focus:border-[#0A868C] cursor-pointer"
             >
               <option value="all">All Locations</option>
               <option value="adelaide_cbd">Adelaide CBD & Chinatown</option>
@@ -123,10 +123,10 @@ export const FoodView: React.FC<FoodViewProps> = ({
         </div>
 
         {/* Price & Quick Toggles */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-stone-100">
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[#EFF4F2]">
           
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-stone-500">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[#5B6E6A]">
               Max Meal Price:
             </span>
             <div className="flex items-center gap-1">
@@ -139,10 +139,10 @@ export const FoodView: React.FC<FoodViewProps> = ({
                 <button
                   key={tier.value}
                   onClick={() => setMaxPrice(tier.value)}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors ${
+                  className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
                     maxPrice === tier.value
-                      ? 'bg-amber-500 text-stone-950 font-bold'
-                      : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+                      ? 'bg-[#0A868C] text-white font-bold'
+                      : 'bg-[#EFF4F2] text-[#2D4543] hover:bg-[#D4DDD9]'
                   }`}
                 >
                   {tier.label}
@@ -154,31 +154,31 @@ export const FoodView: React.FC<FoodViewProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={() => setOnlyStudentDeals(!onlyStudentDeals)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors border ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors border cursor-pointer ${
                 onlyStudentDeals
-                  ? 'bg-amber-100 border-amber-300 text-amber-950 font-bold'
-                  : 'bg-stone-50 border-stone-200 text-stone-600 hover:bg-stone-100'
+                  ? 'bg-[#FBF4F1] border-[#D0A18F] text-[#B57F6C] font-bold'
+                  : 'bg-white border-[#D4DDD9] text-[#475E5A] hover:bg-[#EFF4F2]'
               }`}
             >
-              <Tag className="w-3.5 h-3.5 text-amber-600" />
+              <Tag className="w-3.5 h-3.5 text-[#D0A18F]" />
               <span>Has Student Perk</span>
             </button>
 
             <button
               onClick={() => setOnlyLateNight(!onlyLateNight)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors border ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors border cursor-pointer ${
                 onlyLateNight
-                  ? 'bg-indigo-100 border-indigo-300 text-indigo-950 font-bold'
-                  : 'bg-stone-50 border-stone-200 text-stone-600 hover:bg-stone-100'
+                  ? 'bg-[#EBF4FA] border-[#0666A7] text-[#0666A7] font-bold'
+                  : 'bg-white border-[#D4DDD9] text-[#475E5A] hover:bg-[#EFF4F2]'
               }`}
             >
-              <Moon className="w-3.5 h-3.5 text-indigo-600" />
+              <Moon className="w-3.5 h-3.5 text-[#0666A7]" />
               <span>Late Night / 24/7</span>
             </button>
 
             <button
               onClick={resetFilters}
-              className="text-xs text-stone-500 hover:text-stone-800 underline ml-1"
+              className="text-xs text-[#5B6E6A] hover:text-[#0A868C] underline ml-1 cursor-pointer"
             >
               Reset
             </button>
@@ -189,12 +189,12 @@ export const FoodView: React.FC<FoodViewProps> = ({
       </div>
 
       {/* Results Count & Outing CTA */}
-      <div className="flex items-center justify-between text-xs text-stone-500">
+      <div className="flex items-center justify-between text-xs text-[#5B6E6A]">
         <span>Showing <strong>{filteredFoods.length}</strong> dining spots</span>
         {plannedIds.length > 0 && (
           <button
             onClick={() => onSelectTab('plan')}
-            className="text-amber-700 font-bold hover:underline"
+            className="text-[#0666A7] font-bold hover:underline cursor-pointer"
           >
             Review total outing budget in Planner →
           </button>
@@ -208,52 +208,52 @@ export const FoodView: React.FC<FoodViewProps> = ({
           return (
             <div
               key={food.id}
-              className="bg-white rounded-2xl border border-stone-200 p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4"
+              className="bg-white rounded-2xl border border-[#D4DDD9] p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-4"
             >
               <div className="space-y-3">
                 
                 {/* Badges */}
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-900">
+                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#EFF4F2] text-[#0A868C]">
                       {food.cuisine}
                     </span>
                     {food.openLate && (
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-800 flex items-center gap-1">
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#EBF4FA] text-[#0666A7] flex items-center gap-1">
                         <Moon className="w-3 h-3" />
                         <span>Late Night / 24-7</span>
                       </span>
                     )}
                   </div>
 
-                  <span className="text-xs font-black text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200 shrink-0">
+                  <span className="text-xs font-black text-[#0A868C] bg-[#E6F3F4] px-2.5 py-1 rounded-lg border border-[#0A868C]/30 shrink-0">
                     ~${food.estimatedMealCost.toFixed(2)} AUD
                   </span>
                 </div>
 
                 {/* Name & Address */}
                 <div>
-                  <h3 className="text-lg font-bold text-stone-900">
+                  <h3 className="text-lg font-bold text-[#1A2E2C]">
                     {food.name}
                   </h3>
-                  <p className="text-xs text-stone-500 flex items-center gap-1 mt-0.5">
-                    <MapPin className="w-3.5 h-3.5 shrink-0 text-stone-400" />
+                  <p className="text-xs text-[#5B6E6A] flex items-center gap-1 mt-0.5">
+                    <MapPin className="w-3.5 h-3.5 shrink-0 text-[#87A09B]" />
                     <span>{food.address}</span>
                   </p>
                 </div>
 
-                <p className="text-xs text-stone-600 leading-relaxed">
+                <p className="text-xs text-[#475E5A] leading-relaxed">
                   {food.description}
                 </p>
 
-                {/* Student Deal Callout */}
+                {/* Student Deal Callout using Terracotta Blush */}
                 {food.studentDeal && (
-                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-950 font-medium">
-                    <div className="flex items-center gap-1 text-amber-800 font-bold mb-0.5">
-                      <Sparkles className="w-3.5 h-3.5" />
+                  <div className="bg-[#FBF4F1] border border-[#D0A18F]/50 rounded-xl p-3 text-xs text-[#1A2E2C] font-medium">
+                    <div className="flex items-center gap-1 text-[#B57F6C] font-bold mb-0.5">
+                      <Sparkles className="w-3.5 h-3.5 text-[#D0A18F]" />
                       <span>Student Special:</span>
                     </div>
-                    <p className="text-[11px] leading-tight">{food.studentDeal}</p>
+                    <p className="text-[11px] leading-tight text-[#4A3B35]">{food.studentDeal}</p>
                   </div>
                 )}
 
@@ -262,7 +262,7 @@ export const FoodView: React.FC<FoodViewProps> = ({
                   {food.dietaryNotes.map((note) => (
                     <span
                       key={note}
-                      className="px-2 py-0.5 rounded text-[10px] font-medium bg-stone-100 text-stone-600"
+                      className="px-2 py-0.5 rounded text-[10px] font-medium bg-[#EFF4F2] text-[#4F6D67]"
                     >
                       {note}
                     </span>
@@ -270,27 +270,27 @@ export const FoodView: React.FC<FoodViewProps> = ({
                 </div>
 
                 {/* Public Transport */}
-                <div className="bg-sky-50 border border-sky-100 p-2.5 rounded-xl text-[11px] text-sky-950 flex items-start gap-1.5">
-                  <Bus className="w-3.5 h-3.5 text-sky-600 shrink-0 mt-0.5" />
+                <div className="bg-[#EBF4FA] border border-[#0666A7]/20 p-2.5 rounded-xl text-[11px] text-[#0666A7] flex items-start gap-1.5">
+                  <Bus className="w-3.5 h-3.5 text-[#0666A7] shrink-0 mt-0.5" />
                   <span className="leading-tight">{food.transitSummary}</span>
                 </div>
 
               </div>
 
               {/* Bottom popular item & Add to outing button */}
-              <div className="pt-3 border-t border-stone-100 flex items-center justify-between gap-3">
+              <div className="pt-3 border-t border-[#EFF4F2] flex items-center justify-between gap-3">
                 <div className="text-xs">
-                  <span className="text-stone-400 block text-[10px]">Popular order</span>
-                  <span className="font-semibold text-stone-800 line-clamp-1">{food.popularItem}</span>
-                  <span className="text-[11px] font-bold text-stone-600">${food.popularItemPrice.toFixed(2)}</span>
+                  <span className="text-[#87A09B] block text-[10px]">Popular order</span>
+                  <span className="font-semibold text-[#1A2E2C] line-clamp-1">{food.popularItem}</span>
+                  <span className="text-[11px] font-bold text-[#5B6E6A]">${food.popularItemPrice.toFixed(2)}</span>
                 </div>
 
                 <button
                   onClick={() => onTogglePlanFood(food)}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 transition-colors flex items-center gap-1 ${
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 transition-colors flex items-center gap-1 cursor-pointer ${
                     isPlanned
-                      ? 'bg-rose-600 text-white hover:bg-rose-700'
-                      : 'bg-amber-500 hover:bg-amber-400 text-stone-950'
+                      ? 'bg-[#FBF4F1] text-[#B57F6C] border border-[#D0A18F]'
+                      : 'bg-[#0A868C] hover:bg-[#076E73] text-white'
                   }`}
                 >
                   {isPlanned ? (

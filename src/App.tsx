@@ -160,12 +160,12 @@ export default function App() {
   const plannedRefIds = plannedItems.map(i => i.refId);
 
   return (
-    <div className="min-h-screen bg-stone-100 text-stone-900 flex flex-col font-sans selection:bg-amber-500 selection:text-stone-950">
+    <div className="min-h-screen bg-[#F7F9F8] text-[#1A2E2C] flex flex-col font-sans selection:bg-[#0A868C] selection:text-white">
       
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-stone-900 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-2xl border border-stone-700 flex items-center gap-2 animate-bounce">
-          <span className="w-2 h-2 rounded-full bg-amber-400" />
+        <div className="fixed bottom-6 right-6 z-50 bg-[#1A2E2C] text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-2xl border border-[#87A09B]/40 flex items-center gap-2 animate-bounce">
+          <span className="w-2 h-2 rounded-full bg-[#0A868C]" />
           <span>{toastMessage}</span>
         </div>
       )}

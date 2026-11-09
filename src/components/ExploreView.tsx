@@ -135,41 +135,41 @@ export const ExploreView: React.FC<ExploreViewProps> = ({
       
       {/* Title & Introduction */}
       <div className="space-y-3">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-900">
-          <Compass className="w-3.5 h-3.5 text-amber-700" />
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#E6F3F4] text-[#0A868C] border border-[#87A09B]/40">
+          <Compass className="w-3.5 h-3.5 text-[#0A868C]" />
           <span>Discover Adelaide Affordably</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">
+        <h1 className="text-3xl sm:text-4xl font-black text-[#1A2E2C] tracking-tight">
           Explore Adelaide: Budget-Friendly Activities
         </h1>
-        <p className="text-stone-600 text-sm sm:text-base max-w-3xl leading-relaxed">
+        <p className="text-[#475E5A] text-sm sm:text-base max-w-3xl leading-relaxed">
           Filter by your interests, neighborhood, or maximum budget. Every activity includes direct public transport guidance, student tips, and cost details so you can head out with total confidence.
         </p>
       </div>
 
       {/* Control Panel: Search & Filters */}
-      <div className="bg-white border border-stone-200 rounded-2xl p-5 shadow-sm space-y-4">
+      <div className="bg-white border border-[#D4DDD9] rounded-2xl p-5 shadow-xs space-y-4">
         
         {/* Top Row: Search and Sort */}
         <div className="flex flex-col md:flex-row gap-3">
           <div className="relative flex-1">
-            <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-3.5" />
+            <Search className="w-4 h-4 text-[#87A09B] absolute left-3.5 top-3.5" />
             <input
               type="text"
               placeholder="Search by name, beach, museum, park, koalas, or tram line..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-stone-200 text-xs sm:text-sm text-stone-900 focus:outline-none focus:border-amber-500 placeholder:text-stone-400"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#D4DDD9] text-xs sm:text-sm text-[#1A2E2C] focus:outline-none focus:border-[#0A868C] placeholder:text-[#87A09B]"
             />
           </div>
 
           <div className="flex items-center gap-2">
             <div className="relative min-w-[170px]">
-              <ArrowUpDown className="w-4 h-4 text-stone-400 absolute left-3 top-3" />
+              <ArrowUpDown className="w-4 h-4 text-[#87A09B] absolute left-3 top-3" />
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="w-full pl-9 pr-8 py-2.5 rounded-xl border border-stone-200 text-xs sm:text-sm text-stone-800 bg-white focus:outline-none focus:border-amber-500 cursor-pointer appearance-none"
+                className="w-full pl-9 pr-8 py-2.5 rounded-xl border border-[#D4DDD9] text-xs sm:text-sm text-[#1A2E2C] bg-white focus:outline-none focus:border-[#0A868C] cursor-pointer appearance-none"
               >
                 <option value="featured">Featured First</option>
                 <option value="cost_asc">Cost: Low to High</option>
@@ -180,7 +180,7 @@ export const ExploreView: React.FC<ExploreViewProps> = ({
 
             <button
               onClick={resetFilters}
-              className="px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-semibold text-stone-600 hover:text-stone-900 hover:bg-stone-50 transition-colors whitespace-nowrap"
+              className="px-3.5 py-2.5 rounded-xl border border-[#D4DDD9] text-xs font-semibold text-[#475E5A] hover:text-[#0A868C] hover:bg-[#EFF4F2] transition-colors whitespace-nowrap cursor-pointer"
             >
               Reset
             </button>
@@ -189,7 +189,7 @@ export const ExploreView: React.FC<ExploreViewProps> = ({
 
         {/* Exploration Style: Solo vs Social vs Newcomer */}
         <div className="space-y-1.5 pt-1">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-stone-500">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-[#5B6E6A]">
             Exploration Style:
           </span>
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
@@ -202,10 +202,10 @@ export const ExploreView: React.FC<ExploreViewProps> = ({
               <button
                 key={style.id}
                 onClick={() => setSelectedStyle(style.id as any)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                   selectedStyle === style.id
-                    ? 'bg-stone-900 text-amber-400 font-bold shadow-sm'
-                    : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+                    ? 'bg-[#0A868C] text-white font-bold shadow-xs'
+                    : 'bg-[#EFF4F2] text-[#2D4543] hover:bg-[#D4DDD9]'
                 }`}
               >
                 {style.label}
@@ -216,7 +216,7 @@ export const ExploreView: React.FC<ExploreViewProps> = ({
 
         {/* Categories Bar */}
         <div className="space-y-1.5">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-stone-500">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-[#5B6E6A]">
             By Interest:
           </span>
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
@@ -226,10 +226,10 @@ export const ExploreView: React.FC<ExploreViewProps> = ({
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                     active
-                      ? 'bg-amber-500 text-stone-950 shadow-sm'
-                      : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+                      ? 'bg-[#0A868C] text-white shadow-xs'
+                      : 'bg-[#EFF4F2] text-[#2D4543] hover:bg-[#D4DDD9]'
                   }`}
                 >
                   {cat.label}
@@ -240,18 +240,18 @@ export const ExploreView: React.FC<ExploreViewProps> = ({
         </div>
 
         {/* Secondary Filters: Location & Budget */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-stone-100">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-[#EFF4F2]">
           
           {/* Location Area */}
           <div className="space-y-1">
-            <label className="text-[11px] font-bold uppercase tracking-wider text-stone-500 flex items-center gap-1">
-              <MapPin className="w-3.5 h-3.5 text-stone-400" />
+            <label className="text-[11px] font-bold uppercase tracking-wider text-[#5B6E6A] flex items-center gap-1">
+              <MapPin className="w-3.5 h-3.5 text-[#87A09B]" />
               <span>Location / Precinct:</span>
             </label>
             <select
               value={selectedLocation}
               onChange={(e) => setSelectedLocation(e.target.value as LocationArea)}
-              className="w-full px-3 py-2 rounded-xl border border-stone-200 text-xs text-stone-800 bg-white focus:outline-none focus:border-amber-500 cursor-pointer"
+              className="w-full px-3 py-2 rounded-xl border border-[#D4DDD9] text-xs text-[#1A2E2C] bg-white focus:outline-none focus:border-[#0A868C] cursor-pointer"
             >
               {locations.map((loc) => (
                 <option key={loc.id} value={loc.id}>
@@ -263,14 +263,14 @@ export const ExploreView: React.FC<ExploreViewProps> = ({
 
           {/* Budget Filter */}
           <div className="space-y-1">
-            <label className="text-[11px] font-bold uppercase tracking-wider text-stone-500 flex items-center gap-1">
-              <DollarSign className="w-3.5 h-3.5 text-stone-400" />
+            <label className="text-[11px] font-bold uppercase tracking-wider text-[#5B6E6A] flex items-center gap-1">
+              <DollarSign className="w-3.5 h-3.5 text-[#87A09B]" />
               <span>Maximum Cost:</span>
             </label>
             <select
               value={selectedBudgetTier}
               onChange={(e) => setSelectedBudgetTier(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-stone-200 text-xs text-stone-800 bg-white focus:outline-none focus:border-amber-500 cursor-pointer"
+              className="w-full px-3 py-2 rounded-xl border border-[#D4DDD9] text-xs text-[#1A2E2C] bg-white focus:outline-none focus:border-[#0A868C] cursor-pointer"
             >
               <option value="all">Any Budget</option>
               <option value="0">$0.00 (100% Free Activities)</option>
@@ -285,12 +285,12 @@ export const ExploreView: React.FC<ExploreViewProps> = ({
       </div>
 
       {/* Results Header */}
-      <div className="flex items-center justify-between text-xs text-stone-500">
+      <div className="flex items-center justify-between text-xs text-[#5B6E6A]">
         <span>Showing <strong>{filteredActivities.length}</strong> activities matching your filters</span>
         {plannedIds.length > 0 && (
           <button
             onClick={() => onSelectTab('plan')}
-            className="text-amber-700 font-bold hover:underline"
+            className="text-[#0666A7] font-bold hover:underline cursor-pointer"
           >
             {plannedIds.length} item{plannedIds.length > 1 ? 's' : ''} in your Outing Plan →
           </button>
@@ -299,17 +299,17 @@ export const ExploreView: React.FC<ExploreViewProps> = ({
 
       {/* Activities Grid */}
       {filteredActivities.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-stone-200 p-12 text-center space-y-4">
-          <div className="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto">
+        <div className="bg-white rounded-2xl border border-[#D4DDD9] p-12 text-center space-y-4">
+          <div className="w-12 h-12 rounded-full bg-[#E6F3F4] text-[#0A868C] flex items-center justify-center mx-auto">
             <SlidersHorizontal className="w-6 h-6" />
           </div>
-          <h3 className="text-lg font-bold text-stone-900">No activities match your current filters</h3>
-          <p className="text-xs text-stone-500 max-w-sm mx-auto">
+          <h3 className="text-lg font-bold text-[#1A2E2C]">No activities match your current filters</h3>
+          <p className="text-xs text-[#5B6E6A] max-w-sm mx-auto">
             Try resetting your search query, increasing your budget limit, or clearing location filters.
           </p>
           <button
             onClick={resetFilters}
-            className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-bold transition-colors"
+            className="px-4 py-2 rounded-xl bg-[#0A868C] hover:bg-[#076E73] text-white text-xs font-bold transition-colors cursor-pointer"
           >
             Reset All Filters
           </button>
@@ -321,78 +321,121 @@ export const ExploreView: React.FC<ExploreViewProps> = ({
             return (
               <div
                 key={act.id}
-                className="bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
+                className="bg-white rounded-2xl border border-[#D4DDD9] overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between group"
               >
-                {/* Header */}
-                <div className="p-5 space-y-3">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-900">
-                      {act.categoryLabel}
-                    </span>
-                    <button
-                      onClick={() => onTogglePlanActivity(act)}
-                      className={`p-1.5 rounded-full transition-colors ${
-                        isPlanned
-                          ? 'bg-rose-500 text-white'
-                          : 'bg-stone-100 hover:bg-stone-200 text-stone-600'
-                      }`}
-                      title={isPlanned ? 'Remove from Outing Plan' : 'Add to Outing Plan'}
-                    >
-                      <Heart className={`w-4 h-4 ${isPlanned ? 'fill-white' : ''}`} />
-                    </button>
+                {/* Visual Image Header (if photo exists) */}
+                {act.imageSrc && (
+                  <div className="relative h-44 w-full overflow-hidden bg-[#EFF4F2]">
+                    <img 
+                      src={act.imageSrc} 
+                      alt={act.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      referrerPolicy="no-referrer"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+                    
+                    <div className="absolute top-3 left-3">
+                      <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white/95 text-[#0A868C] shadow-xs">
+                        {act.categoryLabel}
+                      </span>
+                    </div>
+
+                    <div className="absolute top-3 right-3">
+                      <button
+                        onClick={() => onTogglePlanActivity(act)}
+                        className={`p-1.5 rounded-full transition-colors cursor-pointer ${
+                          isPlanned
+                            ? 'bg-[#D0A18F] text-[#1A2E2C]'
+                            : 'bg-black/40 hover:bg-black/60 text-white'
+                        }`}
+                        title={isPlanned ? 'Remove from Outing Plan' : 'Add to Outing Plan'}
+                      >
+                        <Heart className={`w-4 h-4 ${isPlanned ? 'fill-[#1A2E2C]' : ''}`} />
+                      </button>
+                    </div>
+
+                    {act.highlightTag && (
+                      <div className="absolute bottom-2.5 left-3">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-black/60 text-white backdrop-blur-xs">
+                          {act.highlightTag}
+                        </span>
+                      </div>
+                    )}
                   </div>
+                )}
+
+                {/* Content */}
+                <div className="p-5 space-y-3">
+                  {!act.imageSrc && (
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#E6F3F4] text-[#0A868C]">
+                        {act.categoryLabel}
+                      </span>
+                      <button
+                        onClick={() => onTogglePlanActivity(act)}
+                        className={`p-1.5 rounded-full transition-colors cursor-pointer ${
+                          isPlanned
+                            ? 'bg-[#D0A18F] text-[#1A2E2C]'
+                            : 'bg-[#EFF4F2] hover:bg-[#D4DDD9] text-[#475E5A]'
+                        }`}
+                        title={isPlanned ? 'Remove from Outing Plan' : 'Add to Outing Plan'}
+                      >
+                        <Heart className={`w-4 h-4 ${isPlanned ? 'fill-[#1A2E2C]' : ''}`} />
+                      </button>
+                    </div>
+                  )}
 
                   <div>
-                    <h3 className="font-bold text-lg text-stone-900 group-hover:text-amber-700 transition-colors leading-snug">
+                    <h3 className="font-bold text-lg text-[#1A2E2C] group-hover:text-[#0A868C] transition-colors leading-snug">
                       {act.title}
                     </h3>
-                    <p className="text-xs text-stone-500 flex items-center gap-1 mt-1">
-                      <MapPin className="w-3.5 h-3.5 shrink-0 text-stone-400" />
+                    <p className="text-xs text-[#5B6E6A] flex items-center gap-1 mt-1">
+                      <MapPin className="w-3.5 h-3.5 shrink-0 text-[#87A09B]" />
                       <span>{act.locationName}</span>
                     </p>
                   </div>
 
-                  <p className="text-xs text-stone-600 line-clamp-3 leading-relaxed">
+                  <p className="text-xs text-[#475E5A] line-clamp-3 leading-relaxed">
                     {act.description}
                   </p>
 
                   {/* Highlights & Cost */}
-                  <div className="pt-2 border-t border-stone-100 space-y-2 text-xs">
+                  <div className="pt-2 border-t border-[#EFF4F2] space-y-2 text-xs">
                     <div className="flex items-center justify-between">
-                      <span className="text-stone-500">Cost:</span>
-                      <span className={`font-bold ${act.isFree ? 'text-emerald-700' : 'text-stone-900'}`}>
+                      <span className="text-[#5B6E6A]">Cost:</span>
+                      <span className={`font-bold ${act.isFree ? 'text-[#0A868C]' : 'text-[#1A2E2C]'}`}>
                         {act.costDescription}
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between text-stone-500">
+                    <div className="flex items-center justify-between text-[#5B6E6A]">
                       <span>Time Needed:</span>
-                      <span className="font-medium text-stone-800">{act.timeNeeded}</span>
+                      <span className="font-medium text-[#1A2E2C]">{act.timeNeeded}</span>
                     </div>
 
                     {/* Transit summary badge */}
-                    <div className="bg-sky-50 border border-sky-100 p-2.5 rounded-xl text-[11px] text-sky-900 flex items-start gap-1.5">
-                      <Bus className="w-3.5 h-3.5 text-sky-600 shrink-0 mt-0.5" />
+                    <div className="bg-[#EBF4FA] border border-[#0666A7]/20 p-2.5 rounded-xl text-[11px] text-[#0666A7] flex items-start gap-1.5">
+                      <Bus className="w-3.5 h-3.5 text-[#0666A7] shrink-0 mt-0.5" />
                       <span className="line-clamp-2 leading-tight">{act.transitSummary}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Footer Buttons */}
-                <div className="p-4 bg-stone-50 border-t border-stone-100 flex items-center gap-2">
+                <div className="p-4 bg-[#F7F9F8] border-t border-[#EFF4F2] flex items-center gap-2">
                   <button
                     onClick={() => onOpenActivity(act)}
-                    className="flex-1 py-2 text-xs font-semibold bg-white border border-stone-200 hover:bg-stone-100 text-stone-800 rounded-xl transition-colors text-center"
+                    className="flex-1 py-2 text-xs font-semibold bg-white border border-[#D4DDD9] hover:bg-[#EFF4F2] text-[#1A2E2C] rounded-xl transition-colors text-center cursor-pointer"
                   >
                     View Details
                   </button>
 
                   <button
                     onClick={() => onTogglePlanActivity(act)}
-                    className={`px-4 py-2 text-xs font-bold rounded-xl transition-colors flex items-center gap-1 ${
+                    className={`px-4 py-2 text-xs font-bold rounded-xl transition-colors flex items-center gap-1 cursor-pointer ${
                       isPlanned
-                        ? 'bg-rose-600 text-white hover:bg-rose-700'
-                        : 'bg-amber-500 text-stone-950 hover:bg-amber-400'
+                        ? 'bg-[#FBF4F1] text-[#B57F6C] border border-[#D0A18F]'
+                        : 'bg-[#0A868C] text-white hover:bg-[#076E73]'
                     }`}
                   >
                     {isPlanned ? (

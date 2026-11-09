@@ -5,7 +5,6 @@ import {
   Bus, 
   Trash2, 
   Plus, 
-  Share2, 
   Check, 
   Sparkles, 
   Compass, 
@@ -51,20 +50,15 @@ export const PlanOutingView: React.FC<PlanOutingViewProps> = ({
   const [showCustomModal, setShowCustomModal] = useState(false);
 
   // Transport calculation logic:
-  // Count how many trips outside the free zone
   const transportCost = useMemo(() => {
     if (transitPassType === 'unlimited_pass' || transitPassType === 'free_zone_only') {
       return 0;
     }
-    // Check which items require paid transit
     const paidTripsCount = plannedItems.filter(item => 
       item.transitType !== 'tram_free' && item.transitType !== 'bus_free' && item.transitType !== 'walk'
     ).length;
 
-    // Student concession fare: $1.25 peak round trip or transfer
-    // Cap at concession daily cap (~$5.30)
     const baseFarePerTrip = 1.25;
-    // Assume return trip if there's at least one paid destination
     const trips = paidTripsCount > 0 ? Math.max(2, paidTripsCount * 2) : 0;
     const total = Math.min(5.30, trips * baseFarePerTrip);
     return total;
@@ -132,14 +126,14 @@ export const PlanOutingView: React.FC<PlanOutingViewProps> = ({
       
       {/* Title */}
       <div className="space-y-3">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-900">
-          <Calculator className="w-3.5 h-3.5 text-emerald-700" />
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#EBF4FA] text-[#0666A7] border border-[#0666A7]/30">
+          <Calculator className="w-3.5 h-3.5 text-[#0666A7]" />
           <span>Interactive Cost Estimator & Route Planner</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">
+        <h1 className="text-3xl sm:text-4xl font-black text-[#1A2E2C] tracking-tight">
           Plan Your Outing: Estimated Costs & Transit
         </h1>
-        <p className="text-stone-600 text-sm sm:text-base max-w-3xl leading-relaxed">
+        <p className="text-[#475E5A] text-sm sm:text-base max-w-3xl leading-relaxed">
           Avoid spending surprises. Build your custom Adelaide day trip below or load a pre-made student budget day. The calculator figures out your total expenses—including concession tram/bus fares, dining, and admissions!
         </p>
       </div>
@@ -147,39 +141,39 @@ export const PlanOutingView: React.FC<PlanOutingViewProps> = ({
       {/* Pre-made Itineraries Quick Load Strip */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-bold uppercase tracking-wider text-stone-500 flex items-center gap-1.5">
-            <Sparkles className="w-4 h-4 text-amber-500" />
+          <span className="text-xs font-bold uppercase tracking-wider text-[#5B6E6A] flex items-center gap-1.5">
+            <Sparkles className="w-4 h-4 text-[#0A868C]" />
             <span>Or Load a Ready-Made Student Itinerary:</span>
           </span>
-          <span className="text-[11px] text-stone-400">Click to instantly populate your plan</span>
+          <span className="text-[11px] text-[#87A09B]">Click to instantly populate your plan</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {PRE_MADE_ITINERARIES.map((itin) => (
             <div
               key={itin.id}
-              className="bg-white border border-stone-200 hover:border-amber-400 rounded-xl p-4 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-3 text-left group"
+              className="bg-white border border-[#D4DDD9] hover:border-[#0A868C] rounded-xl p-4 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-3 text-left group"
             >
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#E6F3F4] text-[#0A868C]">
                     {itin.badge}
                   </span>
-                  <span className="text-xs font-black text-emerald-700">
+                  <span className="text-xs font-black text-[#0A868C]">
                     ~${itin.estimatedTotal.toFixed(2)} AUD
                   </span>
                 </div>
-                <h3 className="font-bold text-sm text-stone-900 group-hover:text-amber-700 transition-colors">
+                <h3 className="font-bold text-sm text-[#1A2E2C] group-hover:text-[#0A868C] transition-colors">
                   {itin.title}
                 </h3>
-                <p className="text-[11px] text-stone-500 mt-1 line-clamp-2">
+                <p className="text-[11px] text-[#5B6E6A] mt-1 line-clamp-2">
                   {itin.subtitle}
                 </p>
               </div>
 
               <button
                 onClick={() => onLoadPreMadeItinerary(itin)}
-                className="w-full py-1.5 px-3 rounded-lg bg-stone-100 group-hover:bg-amber-500 text-stone-800 group-hover:text-stone-950 font-bold text-xs transition-colors flex items-center justify-center gap-1"
+                className="w-full py-1.5 px-3 rounded-lg bg-[#EFF4F2] group-hover:bg-[#0A868C] text-[#2D4543] group-hover:text-white font-bold text-xs transition-colors flex items-center justify-center gap-1 cursor-pointer"
               >
                 <span>Load This Plan</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -196,17 +190,17 @@ export const PlanOutingView: React.FC<PlanOutingViewProps> = ({
         <div className="lg:col-span-5 space-y-6">
           
           {/* Settings Box */}
-          <div className="bg-white border border-stone-200 rounded-2xl p-6 shadow-sm space-y-5">
-            <h2 className="text-base font-bold text-stone-900 flex items-center gap-2">
-              <Compass className="w-4 h-4 text-amber-600" />
+          <div className="bg-white border border-[#D4DDD9] rounded-2xl p-6 shadow-xs space-y-5">
+            <h2 className="text-base font-bold text-[#1A2E2C] flex items-center gap-2">
+              <Compass className="w-4 h-4 text-[#0A868C]" />
               <span>Outing Parameters</span>
             </h2>
 
             {/* Target Budget Slider */}
             <div className="space-y-2">
-              <div className="flex items-center justify-between text-xs font-semibold text-stone-700">
+              <div className="flex items-center justify-between text-xs font-semibold text-[#1A2E2C]">
                 <span>My Spending Target:</span>
-                <span className="text-base font-black text-amber-600">${targetBudget.toFixed(2)} AUD</span>
+                <span className="text-base font-black text-[#0A868C]">${targetBudget.toFixed(2)} AUD</span>
               </div>
               <input
                 type="range"
@@ -215,9 +209,9 @@ export const PlanOutingView: React.FC<PlanOutingViewProps> = ({
                 step="5"
                 value={targetBudget}
                 onChange={(e) => setTargetBudget(Number(e.target.value))}
-                className="w-full accent-amber-500 cursor-pointer"
+                className="w-full accent-[#0A868C] cursor-pointer"
               />
-              <div className="flex justify-between text-[10px] text-stone-400">
+              <div className="flex justify-between text-[10px] text-[#87A09B]">
                 <span>$0 (Free Day)</span>
                 <span>$25</span>
                 <span>$50</span>
@@ -227,14 +221,14 @@ export const PlanOutingView: React.FC<PlanOutingViewProps> = ({
 
             {/* Starting Location */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-stone-600 flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5 text-stone-400" />
+              <label className="text-xs font-bold text-[#475E5A] flex items-center gap-1">
+                <MapPin className="w-3.5 h-3.5 text-[#87A09B]" />
                 <span>Starting From:</span>
               </label>
               <select
                 value={startingPoint}
                 onChange={(e) => setStartingPoint(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-stone-200 text-xs text-stone-800 bg-white focus:outline-none focus:border-amber-500"
+                className="w-full px-3 py-2 rounded-xl border border-[#D4DDD9] text-xs text-[#1A2E2C] bg-white focus:outline-none focus:border-[#0A868C]"
               >
                 <option value="North Terrace (Uni Adelaide / UniSA)">North Terrace (Uni of Adelaide / UniSA)</option>
                 <option value="UniSA City West (Hindley St / BioMed)">UniSA City West (Hindley St / BioMed)</option>
@@ -247,14 +241,14 @@ export const PlanOutingView: React.FC<PlanOutingViewProps> = ({
 
             {/* Public Transit Concession Rule */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-stone-600 flex items-center gap-1">
-                <CreditCard className="w-3.5 h-3.5 text-stone-400" />
+              <label className="text-xs font-bold text-[#475E5A] flex items-center gap-1">
+                <CreditCard className="w-3.5 h-3.5 text-[#87A09B]" />
                 <span>Transit Fare Preference:</span>
               </label>
               <select
                 value={transitPassType}
                 onChange={(e) => setTransitPassType(e.target.value as any)}
-                className="w-full px-3 py-2 rounded-xl border border-stone-200 text-xs text-stone-800 bg-white focus:outline-none focus:border-amber-500"
+                className="w-full px-3 py-2 rounded-xl border border-[#D4DDD9] text-xs text-[#1A2E2C] bg-white focus:outline-none focus:border-[#0A868C]"
               >
                 <option value="concession_single">Student Concession Pay-As-You-Go ($1.25 peak / $0.85 off-peak)</option>
                 <option value="unlimited_pass">Already have 28-Day Student Pass ($0 extra cost)</option>
@@ -263,54 +257,54 @@ export const PlanOutingView: React.FC<PlanOutingViewProps> = ({
             </div>
           </div>
 
-          {/* Cost Breakdown Card */}
-          <div className="bg-stone-900 text-stone-100 rounded-2xl p-6 shadow-xl border border-stone-800 space-y-5">
-            <div className="flex items-center justify-between pb-3 border-b border-stone-800">
+          {/* Cost Breakdown Card styled with Deep Marine Charcoal and Coolors Accents */}
+          <div className="bg-[#1A2E2C] text-[#EFF4F2] rounded-2xl p-6 shadow-md border border-[#87A09B]/30 space-y-5">
+            <div className="flex items-center justify-between pb-3 border-b border-[#2D4543]">
               <h2 className="text-base font-bold text-white flex items-center gap-2">
-                <DollarSign className="w-4 h-4 text-emerald-400" />
+                <DollarSign className="w-4 h-4 text-[#0A868C]" />
                 <span>Estimated Cost Breakdown</span>
               </h2>
               <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${
                 isOverBudget
-                  ? 'bg-rose-500 text-white'
-                  : 'bg-emerald-500 text-stone-950'
+                  ? 'bg-[#D0A18F] text-[#1A2E2C]'
+                  : 'bg-[#0A868C] text-white'
               }`}>
                 {isOverBudget ? 'Over Budget' : 'Within Budget'}
               </span>
             </div>
 
             <div className="space-y-3 text-xs">
-              <div className="flex items-center justify-between text-stone-300">
+              <div className="flex items-center justify-between text-[#D4DDD9]">
                 <span>Activities & Admissions:</span>
                 <span className="font-bold text-white">${activitiesCost.toFixed(2)} AUD</span>
               </div>
-              <div className="flex items-center justify-between text-stone-300">
+              <div className="flex items-center justify-between text-[#D4DDD9]">
                 <span>Food, Meals & Snacks:</span>
                 <span className="font-bold text-white">${foodCost.toFixed(2)} AUD</span>
               </div>
-              <div className="flex items-center justify-between text-stone-300">
+              <div className="flex items-center justify-between text-[#D4DDD9]">
                 <span className="flex items-center gap-1">
                   <span>Adelaide Metro Transport:</span>
                   {transitPassType === 'unlimited_pass' && (
-                    <span className="text-[10px] text-emerald-400 font-semibold">(28-Day Pass)</span>
+                    <span className="text-[10px] text-[#A0AA9B] font-semibold">(28-Day Pass)</span>
                   )}
                 </span>
                 <span className="font-bold text-white">${transportCost.toFixed(2)} AUD</span>
               </div>
 
-              <div className="pt-3 border-t border-stone-800 flex items-center justify-between text-sm">
-                <span className="font-bold text-amber-400">Total Estimated Outing:</span>
-                <span className="font-black text-xl text-amber-400">${grandTotal.toFixed(2)} AUD</span>
+              <div className="pt-3 border-t border-[#2D4543] flex items-center justify-between text-sm">
+                <span className="font-bold text-[#E6F3F4]">Total Estimated Outing:</span>
+                <span className="font-black text-xl text-[#0A868C]">${grandTotal.toFixed(2)} AUD</span>
               </div>
 
               <div className="flex items-center justify-between text-xs pt-1">
-                <span className="text-stone-400">Target Budget:</span>
-                <span className="text-stone-300 font-semibold">${targetBudget.toFixed(2)} AUD</span>
+                <span className="text-[#87A09B]">Target Budget:</span>
+                <span className="text-white font-semibold">${targetBudget.toFixed(2)} AUD</span>
               </div>
 
               <div className="flex items-center justify-between text-xs pt-1">
-                <span className="text-stone-400">Remaining Cushion:</span>
-                <span className={`font-bold ${budgetRemaining >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                <span className="text-[#87A09B]">Remaining Cushion:</span>
+                <span className={`font-bold ${budgetRemaining >= 0 ? 'text-[#A0AA9B]' : 'text-[#D0A18F]'}`}>
                   {budgetRemaining >= 0 ? `+$${budgetRemaining.toFixed(2)}` : `-$${Math.abs(budgetRemaining).toFixed(2)}`}
                 </span>
               </div>
@@ -320,11 +314,11 @@ export const PlanOutingView: React.FC<PlanOutingViewProps> = ({
             <div className="pt-2 flex flex-wrap gap-2">
               <button
                 onClick={handleCopySummary}
-                className="flex-1 py-2 px-3 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
+                className="flex-1 py-2 px-3 rounded-xl bg-[#2D4543] hover:bg-[#3D5B55] text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
               >
                 {copiedNotification ? (
                   <>
-                    <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    <Check className="w-3.5 h-3.5 text-[#0A868C]" />
                     <span>Copied!</span>
                   </>
                 ) : (
@@ -337,7 +331,7 @@ export const PlanOutingView: React.FC<PlanOutingViewProps> = ({
 
               <button
                 onClick={handlePrint}
-                className="py-2 px-3 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
+                className="py-2 px-3 rounded-xl bg-[#2D4543] hover:bg-[#3D5B55] text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                 title="Print or Save as PDF"
               >
                 <Printer className="w-3.5 h-3.5" />
@@ -351,18 +345,18 @@ export const PlanOutingView: React.FC<PlanOutingViewProps> = ({
         {/* Right Column: Outing Stops & Transit Guidance (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
           
-          <div className="bg-white border border-stone-200 rounded-2xl p-6 shadow-sm space-y-6">
+          <div className="bg-white border border-[#D4DDD9] rounded-2xl p-6 shadow-xs space-y-6">
             
             {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-stone-100">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#EFF4F2]">
               <div>
-                <h2 className="text-lg font-bold text-stone-900 flex items-center gap-2">
+                <h2 className="text-lg font-bold text-[#1A2E2C] flex items-center gap-2">
                   <span>Your Planned Outing Stops</span>
-                  <span className="text-xs font-bold bg-amber-100 text-amber-900 px-2.5 py-0.5 rounded-full">
+                  <span className="text-xs font-bold bg-[#E6F3F4] text-[#0A868C] px-2.5 py-0.5 rounded-full">
                     {plannedItems.length} stops
                   </span>
                 </h2>
-                <p className="text-xs text-stone-500 mt-0.5">
+                <p className="text-xs text-[#5B6E6A] mt-0.5">
                   Starting from: <strong>{startingPoint}</strong>
                 </p>
               </div>
@@ -370,7 +364,7 @@ export const PlanOutingView: React.FC<PlanOutingViewProps> = ({
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setShowCustomModal(true)}
-                  className="px-3 py-1.5 rounded-xl border border-stone-200 hover:border-amber-400 text-xs font-semibold text-stone-700 flex items-center gap-1 transition-colors"
+                  className="px-3 py-1.5 rounded-xl border border-[#D4DDD9] hover:border-[#0A868C] text-xs font-semibold text-[#1A2E2C] flex items-center gap-1 transition-colors cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Custom Item</span>
@@ -379,7 +373,7 @@ export const PlanOutingView: React.FC<PlanOutingViewProps> = ({
                 {plannedItems.length > 0 && (
                   <button
                     onClick={onClearAll}
-                    className="px-2.5 py-1.5 text-xs text-stone-400 hover:text-rose-600 transition-colors"
+                    className="px-2.5 py-1.5 text-xs text-[#87A09B] hover:text-[#D0A18F] transition-colors cursor-pointer"
                     title="Clear all items"
                   >
                     Clear All
@@ -388,15 +382,15 @@ export const PlanOutingView: React.FC<PlanOutingViewProps> = ({
               </div>
             </div>
 
-            {/* Custom Item Form Dropdown / Modal */}
+            {/* Custom Item Form Modal */}
             {showCustomModal && (
-              <form onSubmit={handleAddCustom} className="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-3">
+              <form onSubmit={handleAddCustom} className="bg-[#EFF4F2] border border-[#87A09B]/40 rounded-xl p-4 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-amber-900">Add Custom Outing Item or Expense</span>
+                  <span className="text-xs font-bold text-[#1A2E2C]">Add Custom Outing Item or Expense</span>
                   <button 
                     type="button" 
                     onClick={() => setShowCustomModal(false)}
-                    className="text-amber-800 text-xs font-bold"
+                    className="text-[#5B6E6A] text-xs font-bold cursor-pointer"
                   >
                     Cancel
                   </button>
@@ -407,24 +401,24 @@ export const PlanOutingView: React.FC<PlanOutingViewProps> = ({
                     placeholder="e.g. Bubble Tea on Gouger St"
                     value={customTitle}
                     onChange={(e) => setCustomTitle(e.target.value)}
-                    className="sm:col-span-2 px-3 py-1.5 text-xs rounded-lg border border-amber-300 bg-white focus:outline-none"
+                    className="sm:col-span-2 px-3 py-1.5 text-xs rounded-lg border border-[#D4DDD9] bg-white focus:outline-none focus:border-[#0A868C]"
                     autoFocus
                   />
                   <div className="flex items-center gap-1">
-                    <span className="text-xs text-stone-500">$</span>
+                    <span className="text-xs text-[#5B6E6A]">$</span>
                     <input
                       type="number"
                       step="0.5"
                       placeholder="Cost"
                       value={customCost}
                       onChange={(e) => setCustomCost(e.target.value)}
-                      className="w-full px-2 py-1.5 text-xs rounded-lg border border-amber-300 bg-white focus:outline-none"
+                      className="w-full px-2 py-1.5 text-xs rounded-lg border border-[#D4DDD9] bg-white focus:outline-none focus:border-[#0A868C]"
                     />
                   </div>
                 </div>
                 <div className="flex items-center justify-between pt-1">
                   <div className="flex items-center gap-2 text-xs">
-                    <label className="flex items-center gap-1">
+                    <label className="flex items-center gap-1 cursor-pointer">
                       <input
                         type="radio"
                         checked={customType === 'food'}
@@ -432,7 +426,7 @@ export const PlanOutingView: React.FC<PlanOutingViewProps> = ({
                       />
                       <span>Food / Drink</span>
                     </label>
-                    <label className="flex items-center gap-1">
+                    <label className="flex items-center gap-1 cursor-pointer">
                       <input
                         type="radio"
                         checked={customType === 'activity'}
@@ -443,7 +437,7 @@ export const PlanOutingView: React.FC<PlanOutingViewProps> = ({
                   </div>
                   <button
                     type="submit"
-                    className="px-3 py-1 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs rounded-lg"
+                    className="px-3 py-1 bg-[#0A868C] hover:bg-[#076E73] text-white font-bold text-xs rounded-lg cursor-pointer"
                   >
                     Add
                   </button>
@@ -453,26 +447,26 @@ export const PlanOutingView: React.FC<PlanOutingViewProps> = ({
 
             {/* List of stops */}
             {plannedItems.length === 0 ? (
-              <div className="py-12 px-4 text-center space-y-4 border-2 border-dashed border-stone-200 rounded-2xl">
-                <div className="w-12 h-12 rounded-full bg-stone-100 text-stone-400 flex items-center justify-center mx-auto">
+              <div className="py-12 px-4 text-center space-y-4 border-2 border-dashed border-[#D4DDD9] rounded-2xl">
+                <div className="w-12 h-12 rounded-full bg-[#EFF4F2] text-[#0A868C] flex items-center justify-center mx-auto">
                   <Compass className="w-6 h-6" />
                 </div>
                 <div className="space-y-1">
-                  <h3 className="font-bold text-stone-800 text-base">Your outing plan is currently empty</h3>
-                  <p className="text-xs text-stone-500 max-w-sm mx-auto">
+                  <h3 className="font-bold text-[#1A2E2C] text-base">Your outing plan is currently empty</h3>
+                  <p className="text-xs text-[#5B6E6A] max-w-sm mx-auto">
                     Add activities from the <strong>Explore</strong> page or cheap meals from <strong>Food & Cafes</strong>, or pick one of our ready-made itineraries above!
                   </p>
                 </div>
                 <div className="flex justify-center gap-3 pt-2">
                   <button
                     onClick={() => onSelectTab('explore')}
-                    className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs transition-colors"
+                    className="px-4 py-2 rounded-xl bg-[#0A868C] hover:bg-[#076E73] text-white font-bold text-xs transition-colors cursor-pointer"
                   >
                     Browse Activities
                   </button>
                   <button
                     onClick={() => onSelectTab('food')}
-                    className="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 font-semibold text-xs transition-colors"
+                    className="px-4 py-2 rounded-xl bg-[#EFF4F2] hover:bg-[#D4DDD9] text-[#1A2E2C] font-semibold text-xs transition-colors cursor-pointer"
                   >
                     Browse Food Spots
                   </button>
@@ -482,13 +476,13 @@ export const PlanOutingView: React.FC<PlanOutingViewProps> = ({
               <div className="space-y-4">
                 
                 {/* Starting pin */}
-                <div className="flex items-center gap-3 text-xs text-stone-500 bg-stone-50 p-3 rounded-xl border border-stone-200/80">
-                  <div className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-[10px] shrink-0">
+                <div className="flex items-center gap-3 text-xs text-[#5B6E6A] bg-[#EFF4F2] p-3 rounded-xl border border-[#D4DDD9]">
+                  <div className="w-6 h-6 rounded-full bg-[#0A868C] text-white flex items-center justify-center font-bold text-[10px] shrink-0">
                     S
                   </div>
                   <div className="flex-1">
-                    <span className="font-semibold text-stone-800">Trip Starts: {startingPoint}</span>
-                    <p className="text-[11px] text-stone-400">Prepare student ID & metroCARD</p>
+                    <span className="font-semibold text-[#1A2E2C]">Trip Starts: {startingPoint}</span>
+                    <p className="text-[11px] text-[#5B6E6A]">Prepare student ID & metroCARD</p>
                   </div>
                 </div>
 
@@ -496,39 +490,39 @@ export const PlanOutingView: React.FC<PlanOutingViewProps> = ({
                 {plannedItems.map((item, index) => (
                   <div
                     key={item.id}
-                    className="relative bg-white border border-stone-200 rounded-xl p-4 shadow-sm hover:border-amber-300 transition-all space-y-2 group"
+                    className="relative bg-white border border-[#D4DDD9] rounded-xl p-4 shadow-xs hover:border-[#0A868C] transition-all space-y-2 group"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-start gap-3">
-                        <div className="w-6 h-6 rounded-full bg-amber-500 text-stone-950 flex items-center justify-center font-black text-xs shrink-0 mt-0.5">
+                        <div className="w-6 h-6 rounded-full bg-[#0A868C] text-white flex items-center justify-center font-black text-xs shrink-0 mt-0.5">
                           {index + 1}
                         </div>
                         <div>
                           <div className="flex items-center gap-2 flex-wrap">
                             <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
                               item.type === 'activity'
-                                ? 'bg-amber-100 text-amber-900'
-                                : 'bg-rose-100 text-rose-900'
+                                ? 'bg-[#E6F3F4] text-[#0A868C]'
+                                : 'bg-[#FBF4F1] text-[#B57F6C]'
                             }`}>
                               {item.type}
                             </span>
-                            <span className="text-xs text-stone-400">
+                            <span className="text-xs text-[#87A09B]">
                               {item.locationName}
                             </span>
                           </div>
-                          <h4 className="font-bold text-stone-900 text-sm mt-0.5">
+                          <h4 className="font-bold text-[#1A2E2C] text-sm mt-0.5">
                             {item.title}
                           </h4>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-3 shrink-0">
-                        <span className="font-black text-sm text-stone-900">
+                        <span className="font-black text-sm text-[#1A2E2C]">
                           {item.cost === 0 ? 'Free' : `$${item.cost.toFixed(2)}`}
                         </span>
                         <button
                           onClick={() => onRemoveItem(item.id)}
-                          className="p-1.5 text-stone-400 hover:text-rose-600 hover:bg-stone-100 rounded-lg transition-colors"
+                          className="p-1.5 text-[#87A09B] hover:text-[#D0A18F] hover:bg-[#EFF4F2] rounded-lg transition-colors cursor-pointer"
                           title="Remove item"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -537,10 +531,10 @@ export const PlanOutingView: React.FC<PlanOutingViewProps> = ({
                     </div>
 
                     {/* Step Transit Guidance */}
-                    <div className="bg-sky-50 border border-sky-100 p-2.5 rounded-lg text-xs text-sky-950 flex items-start gap-2 mt-2">
-                      <Bus className="w-3.5 h-3.5 text-sky-600 shrink-0 mt-0.5" />
+                    <div className="bg-[#EBF4FA] border border-[#0666A7]/20 p-2.5 rounded-lg text-xs text-[#0666A7] flex items-start gap-2 mt-2">
+                      <Bus className="w-3.5 h-3.5 text-[#0666A7] shrink-0 mt-0.5" />
                       <div className="text-[11px] leading-tight">
-                        <span className="font-bold text-sky-900">Transit Step: </span>
+                        <span className="font-bold text-[#0666A7]">Transit Step: </span>
                         {item.transitSummary}
                       </div>
                     </div>
@@ -548,13 +542,13 @@ export const PlanOutingView: React.FC<PlanOutingViewProps> = ({
                 ))}
 
                 {/* Return trip notice */}
-                <div className="flex items-center gap-3 text-xs text-stone-500 bg-stone-50 p-3 rounded-xl border border-stone-200/80">
-                  <div className="w-6 h-6 rounded-full bg-stone-700 text-white flex items-center justify-center font-bold text-[10px] shrink-0">
+                <div className="flex items-center gap-3 text-xs text-[#5B6E6A] bg-[#EFF4F2] p-3 rounded-xl border border-[#D4DDD9]">
+                  <div className="w-6 h-6 rounded-full bg-[#87A09B] text-white flex items-center justify-center font-bold text-[10px] shrink-0">
                     E
                   </div>
                   <div className="flex-1">
-                    <span className="font-semibold text-stone-800">Return to Campus / Home</span>
-                    <p className="text-[11px] text-stone-400">2-hour transfer rule may apply on your return trip</p>
+                    <span className="font-semibold text-[#1A2E2C]">Return to Campus / Home</span>
+                    <p className="text-[11px] text-[#5B6E6A]">2-hour transfer rule may apply on your return trip</p>
                   </div>
                 </div>
 
@@ -562,19 +556,19 @@ export const PlanOutingView: React.FC<PlanOutingViewProps> = ({
             )}
 
             {/* Bottom Add more prompt */}
-            <div className="pt-4 border-t border-stone-100 flex flex-wrap items-center justify-between gap-3 text-xs">
-              <span className="text-stone-500">Want to explore more spots?</span>
+            <div className="pt-4 border-t border-[#EFF4F2] flex flex-wrap items-center justify-between gap-3 text-xs">
+              <span className="text-[#5B6E6A]">Want to explore more spots?</span>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => onSelectTab('explore')}
-                  className="text-amber-700 font-bold hover:underline"
+                  className="text-[#0A868C] font-bold hover:underline cursor-pointer"
                 >
                   + Add more Activities
                 </button>
-                <span className="text-stone-300">•</span>
+                <span className="text-[#87A09B]">•</span>
                 <button
                   onClick={() => onSelectTab('food')}
-                  className="text-amber-700 font-bold hover:underline"
+                  className="text-[#0666A7] font-bold hover:underline cursor-pointer"
                 >
                   + Add more Meals
                 </button>

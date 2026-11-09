@@ -1,5 +1,21 @@
 @import "tailwindcss";
 
+@theme {
+  --color-palette-teal: #0A868C;
+  --color-palette-teal-dark: #076E73;
+  --color-palette-teal-light: #E6F3F4;
+  --color-palette-sage: #87A09B;
+  --color-palette-sage-light: #EFF4F2;
+  --color-palette-laurel: #A0AA9B;
+  --color-palette-laurel-light: #F3F6F3;
+  --color-palette-ocean: #0666A7;
+  --color-palette-ocean-dark: #05548A;
+  --color-palette-ocean-light: #EBF4FA;
+  --color-palette-blush: #D0A18F;
+  --color-palette-blush-dark: #B57F6C;
+  --color-palette-blush-light: #FBF4F1;
+}
+
 @layer utilities {
   @keyframes fadeIn {
     from { opacity: 0; }
@@ -28,6 +44,8 @@
 
 html {
   scroll-behavior: smooth;
+  background-color: #F7F9F8;
+  color: #1A2E2C;
 }
 
 /* Hide scrollbars for horizontal chip trays while preserving scrollability */

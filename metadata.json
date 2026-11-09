@@ -2,5 +2,7 @@
   "name": "Adelaide Pocket Guide",
   "description": "Discover and explore Adelaide affordably, confidently and independently for international students with budget-friendly activities, food gems, student discounts, and public transit guides.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

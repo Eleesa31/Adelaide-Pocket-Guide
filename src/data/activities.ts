@@ -1,4 +1,10 @@
 import { Activity } from '../types';
+import oceanBeachImg from '../assets/images/nature_ocean_beach_1794200740223.jpg';
+import waterfallImg from '../assets/images/nature_waterfall_gully_1794200739732.jpg';
+import forestImg from '../assets/images/nature_eucalyptus_forest_1794200740842.jpg';
+import botanicTreesImg from '../assets/images/nature_botanic_trees_1794200741131.jpg';
+
+export { oceanBeachImg, waterfallImg, forestImg, botanicTreesImg };
 
 export const ACTIVITIES: Activity[] = [
   {
@@ -19,6 +25,7 @@ export const ACTIVITIES: Activity[] = [
     description: 'A 50-hectare oasis in the heart of the city featuring historic glasshouses, Australian native rainforest, serene lotus ponds, and manicured rose gardens.',
     highlightTag: 'Free Tram Stop',
     featured: true,
+    imageSrc: botanicTreesImg,
     address: 'North Terrace, Adelaide SA 5000',
     nearbyFood: 'Adelaide Botanic Garden Kiosk or grab cheap snacks on Frome Rd',
     socialVibe: 'solo_friendly',
@@ -111,8 +118,33 @@ export const ACTIVITIES: Activity[] = [
     description: 'Adelaide’s most famous seaside town featuring wide golden sands, a heritage wooden jetty, seaside green reserves, and vibrant Jetty Road shopping.',
     highlightTag: 'Iconic Tram Trip',
     featured: true,
+    imageSrc: oceanBeachImg,
     address: 'Moseley Square, Glenelg SA 5045',
     nearbyFood: 'Jetty Road takeaway fish & chips, Bottega Gelateria',
+    socialVibe: 'both',
+    isNewcomerRecommended: true
+  },
+  {
+    id: 'waterfall-gully-falls',
+    title: 'Waterfall Gully Cascades & Mount Lofty Track',
+    category: 'nature_parks',
+    categoryLabel: 'Waterfalls & Hikes',
+    locationArea: 'adelaide_hills',
+    locationName: 'Cleland National Park, Burnside Foothills',
+    costDescription: '100% Free Entry / Concession Bus ~$1.25',
+    costValue: 1.25,
+    isFree: false,
+    transitSummary: 'Take Bus 142 from Grenfell St (CBD) to Stop 18 Glynburn Rd, or Bus 864 to Crafers with a short scenic stroll.',
+    transitType: 'bus_paid',
+    timeNeeded: '2.5–4 hours',
+    bestTimeToVisit: 'Winter and Spring after rain for peak waterfall flow, or early morning for cool misty air',
+    studentTip: 'First Falls is located just 100 metres from the car park—no strenuous hiking required if you just want to relax by the crystal waterfall! If you want an epic student workout, hike the steep 3.9km trail up to Mount Lofty Summit.',
+    description: 'A breathtaking 30-metre natural waterfall tumbling over dark quartzite cliffs into a crystal-clear plunge pool, surrounded by lush native tree ferns, mossy rocks, and peaceful hiking trails.',
+    highlightTag: 'Stunning Natural Waterfall',
+    featured: true,
+    imageSrc: waterfallImg,
+    address: 'Waterfall Gully Rd, Waterfall Gully SA 5066',
+    nearbyFood: 'Utopia at Waterfall Gully cafe or BYO water and trail mix',
     socialVibe: 'both',
     isNewcomerRecommended: true
   },
@@ -176,6 +208,7 @@ export const ACTIVITIES: Activity[] = [
     description: 'Sprawled across 97 hectares on the eastern slopes of Mount Lofty, featuring gullies filled with cool-climate trees, magnolias, fern gullies, and tranquil lakeside walking tracks.',
     highlightTag: 'Stunning Autumn Leaves',
     featured: false,
+    imageSrc: forestImg,
     address: 'Lampert Rd, Crafers SA 5152',
     nearbyFood: 'Crafers village bakeries or pack a picnic'
   },
@@ -239,6 +272,7 @@ export const ACTIVITIES: Activity[] = [
     description: 'South Australia’s oldest national park featuring walking and mountain bike trails, tennis courts, lakes, and abundant wild native Australian wildlife.',
     highlightTag: 'Koalas by Train',
     featured: false,
+    imageSrc: forestImg,
     address: 'Upper Sturt Rd, Belair SA 5052',
     nearbyFood: 'Park kiosk or BYO BBQ supplies (free gas BBQs available)'
   },

@@ -36,6 +36,7 @@ export interface Activity {
   description: string;
   highlightTag?: string;
   featured?: boolean;
+  imageSrc?: string;
   imagePrompt?: string;
   address: string;
   nearbyFood?: string;
