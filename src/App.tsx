@@ -172,7 +172,7 @@ export default function App() {
 
       {/* Navigation */}
       <Navbar
-        currentTab={currentTab}
+        currentTab={currentTab === 'cafe-blog' ? 'food' : currentTab}
         onSelectTab={(tab) => {
           setCurrentTab(tab);
           if (tab !== 'explore') setInitialBudgetFilter(null);
@@ -202,11 +202,13 @@ export default function App() {
           />
         )}
 
-        {currentTab === 'food' && (
+        {(currentTab === 'food' || currentTab === 'cafe-blog') && (
           <FoodView
+            key={currentTab}
             plannedIds={plannedRefIds}
             onTogglePlanFood={handleTogglePlanFood}
             onSelectTab={setCurrentTab}
+            initialSubView={currentTab === 'cafe-blog' ? 'blog' : 'directory'}
           />
         )}
 

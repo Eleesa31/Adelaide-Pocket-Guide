@@ -12,27 +12,35 @@ import {
   Moon, 
   Sparkles,
   SlidersHorizontal,
-  Flame
+  Flame,
+  Wifi,
+  BookOpen,
+  ArrowRight
 } from 'lucide-react';
 import { FoodSpot, LocationArea } from '../types';
-import { FOOD_PLACES } from '../data/foodPlaces';
+import { FOOD_PLACES, cafeStudyHeroImg } from '../data/foodPlaces';
+import { CafeBlogView } from './CafeBlogView';
 
 interface FoodViewProps {
   plannedIds: string[];
   onTogglePlanFood: (food: FoodSpot) => void;
   onSelectTab: (tab: string) => void;
+  initialSubView?: 'directory' | 'blog';
 }
 
 export const FoodView: React.FC<FoodViewProps> = ({
   plannedIds,
   onTogglePlanFood,
-  onSelectTab
+  onSelectTab,
+  initialSubView = 'directory'
 }) => {
+  const [subView, setSubView] = useState<'directory' | 'blog'>(initialSubView);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLocation, setSelectedLocation] = useState<LocationArea>('all');
   const [maxPrice, setMaxPrice] = useState<string>('all');
   const [onlyStudentDeals, setOnlyStudentDeals] = useState(false);
   const [onlyLateNight, setOnlyLateNight] = useState(false);
+  const [onlyStudyWifi, setOnlyStudyWifi] = useState(false);
 
   const filteredFoods = useMemo(() => {
     return FOOD_PLACES.filter((food) => {
@@ -62,9 +70,12 @@ export const FoodView: React.FC<FoodViewProps> = ({
       // Late night only
       if (onlyLateNight && !food.openLate) return false;
 
+      // Study & Free Wi-Fi only
+      if (onlyStudyWifi && !food.wifiAvailable && !food.studyFriendly) return false;
+
       return true;
     });
-  }, [searchTerm, selectedLocation, maxPrice, onlyStudentDeals, onlyLateNight]);
+  }, [searchTerm, selectedLocation, maxPrice, onlyStudentDeals, onlyLateNight, onlyStudyWifi]);
 
   const resetFilters = () => {
     setSearchTerm('');
@@ -72,23 +83,100 @@ export const FoodView: React.FC<FoodViewProps> = ({
     setMaxPrice('all');
     setOnlyStudentDeals(false);
     setOnlyLateNight(false);
+    setOnlyStudyWifi(false);
   };
+
+  if (subView === 'blog') {
+    return (
+      <CafeBlogView
+        plannedIds={plannedIds}
+        onTogglePlanFood={onTogglePlanFood}
+        onBackToDirectory={() => {
+          setSubView('directory');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onSelectTab={onSelectTab}
+      />
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       
-      {/* Title & Introduction */}
-      <div className="space-y-3">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FBF4F1] text-[#B57F6C] border border-[#D0A18F]/40">
-          <UtensilsCrossed className="w-3.5 h-3.5 text-[#B57F6C]" />
-          <span>Affordable Dining & Student Deals</span>
+      {/* Title & Mode Toggle */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div className="space-y-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FBF4F1] text-[#B57F6C] border border-[#D0A18F]/40">
+            <UtensilsCrossed className="w-3.5 h-3.5 text-[#B57F6C]" />
+            <span>Affordable Dining & Student Deals</span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-black text-[#1A2E2C] tracking-tight">
+            Food & Cafes: Student-Tested Cheap Eats
+          </h1>
+          <p className="text-[#475E5A] text-sm sm:text-base max-w-2xl leading-relaxed">
+            From study-friendly cafes with free Wi-Fi and cat lounges to 24/7 bakeries and Chinatown dumplings. Verified AUD prices and exact Adelaide Metro transit routes.
+          </p>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-black text-[#1A2E2C] tracking-tight">
-          Food & Cafes: Student-Tested Cheap Eats
-        </h1>
-        <p className="text-[#475E5A] text-sm sm:text-base max-w-3xl leading-relaxed">
-          From legendary 24/7 bakeries to Chinatown food courts and Gouger Street dumplings. Discover verified meal prices, student ID discounts, and exact transit stops so you can eat well on a budget.
-        </p>
+
+        {/* Sub-view switcher */}
+        <div className="inline-flex items-center gap-1 p-1 bg-[#EFF4F2] border border-[#D4DDD9] rounded-xl self-start md:self-auto shrink-0">
+          <button
+            onClick={() => setSubView('directory')}
+            className="px-3.5 py-2 rounded-lg text-xs font-bold bg-white text-[#0A868C] shadow-xs cursor-pointer whitespace-nowrap"
+          >
+            All Food &amp; Cafes
+          </button>
+          <button
+            onClick={() => {
+              setSubView('blog');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="px-3.5 py-2 rounded-lg text-xs font-semibold text-[#475E5A] hover:text-[#0A868C] transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+          >
+            <BookOpen className="w-3.5 h-3.5" />
+            <span>Cafe Guide Blog</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Featured Blog Banner */}
+      <div
+        onClick={() => {
+          setSubView('blog');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        className="group bg-white border border-[#D4DDD9] hover:border-[#0A868C] rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all grid grid-cols-1 md:grid-cols-12 cursor-pointer"
+      >
+        <div className="md:col-span-4 relative h-44 md:h-auto overflow-hidden bg-[#EFF4F2]">
+          <img
+            src={cafeStudyHeroImg}
+            alt="Student studying with laptop and coffee in Adelaide cafe"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            referrerPolicy="no-referrer"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent md:bg-none" />
+        </div>
+        <div className="md:col-span-8 p-5 sm:p-6 flex flex-col justify-between gap-3">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2 text-xs text-[#5B6E6A]">
+              <span className="font-bold text-[#0A868C]">Featured Student Blog Post</span>
+              <span aria-hidden="true">·</span>
+              <span>6 min read</span>
+              <span aria-hidden="true">·</span>
+              <span>Wi-Fi &amp; Transit Guide</span>
+            </div>
+            <h2 className="text-lg sm:text-xl font-bold text-[#1A2E2C] group-hover:text-[#0A868C] transition-colors">
+              Best Budget-Friendly Cafes Near Me: Study Spots, Breakfast Under $15 &amp; Cat Cafes
+            </h2>
+            <p className="text-xs sm:text-sm text-[#475E5A] leading-relaxed">
+              Looking for a quiet study cafe with free Wi-Fi, affordable morning fuel before class, or a stress-busting cat cafe accessible by Adelaide Metro bus or free tram? Read our complete student guide.
+            </p>
+          </div>
+          <div className="flex items-center gap-1.5 text-xs font-bold text-[#0A868C]">
+            <span>Read Full Blog Guide</span>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+          </div>
+        </div>
       </div>
 
       {/* Filter Bar */}
@@ -151,7 +239,19 @@ export const FoodView: React.FC<FoodViewProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={() => setOnlyStudyWifi(!onlyStudyWifi)}
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors border cursor-pointer ${
+                onlyStudyWifi
+                  ? 'bg-[#E6F3F4] border-[#0A868C] text-[#0A868C] font-bold'
+                  : 'bg-white border-[#D4DDD9] text-[#475E5A] hover:bg-[#EFF4F2]'
+              }`}
+            >
+              <Wifi className="w-3.5 h-3.5 text-[#0A868C]" />
+              <span>Study &amp; Free Wi-Fi</span>
+            </button>
+
             <button
               onClick={() => setOnlyStudentDeals(!onlyStudentDeals)}
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors border cursor-pointer ${
@@ -208,28 +308,47 @@ export const FoodView: React.FC<FoodViewProps> = ({
           return (
             <div
               key={food.id}
-              className="bg-white rounded-2xl border border-[#D4DDD9] p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-4"
+              className="bg-white rounded-2xl border border-[#D4DDD9] overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between"
             >
-              <div className="space-y-3">
-                
-                {/* Badges */}
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#EFF4F2] text-[#0A868C]">
-                      {food.cuisine}
+              {food.imageSrc && (
+                <div className="relative h-40 w-full overflow-hidden bg-[#EFF4F2]">
+                  <img
+                    src={food.imageSrc}
+                    alt={food.name}
+                    className="w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  {food.wifiAvailable && (
+                    <span className="absolute bottom-2.5 left-3 inline-flex items-center gap-1 px-2 py-0.5 rounded bg-black/65 text-white text-[10px] font-semibold backdrop-blur-xs">
+                      <Wifi className="w-3 h-3 text-[#87A09B]" />
+                      <span>Free Wi-Fi</span>
                     </span>
-                    {food.openLate && (
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#EBF4FA] text-[#0666A7] flex items-center gap-1">
-                        <Moon className="w-3 h-3" />
-                        <span>Late Night / 24-7</span>
-                      </span>
-                    )}
-                  </div>
-
-                  <span className="text-xs font-black text-[#0A868C] bg-[#E6F3F4] px-2.5 py-1 rounded-lg border border-[#0A868C]/30 shrink-0">
-                    ~${food.estimatedMealCost.toFixed(2)} AUD
-                  </span>
+                  )}
                 </div>
+              )}
+
+              <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                <div className="space-y-3">
+                  
+                  {/* Badges */}
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#EFF4F2] text-[#0A868C]">
+                        {food.cuisine}
+                      </span>
+                      {food.openLate && (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#EBF4FA] text-[#0666A7] flex items-center gap-1">
+                          <Moon className="w-3 h-3" />
+                          <span>Late Night / 24-7</span>
+                        </span>
+                      )}
+                    </div>
+
+                    <span className="text-xs font-black text-[#0A868C] bg-[#E6F3F4] px-2.5 py-1 rounded-lg border border-[#0A868C]/30 shrink-0 font-mono tabular-nums">
+                      ~${food.estimatedMealCost.toFixed(2)} AUD
+                    </span>
+                  </div>
 
                 {/* Name & Address */}
                 <div>
@@ -306,7 +425,7 @@ export const FoodView: React.FC<FoodViewProps> = ({
                   )}
                 </button>
               </div>
-
+              </div>
             </div>
           );
         })}

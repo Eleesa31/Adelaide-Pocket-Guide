@@ -104,6 +104,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
       onSelectTab('explore');
     } else if (tag === 'Cheap Eats') {
       onSelectTab('food');
+    } else if (tag === 'Cafe Blog') {
+      onSelectTab('cafe-blog');
     } else if (tag === 'Newcomer Guide') {
       onSelectTab('essentials');
     } else {
@@ -159,6 +161,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
             <span className="text-[#6C827E] font-medium">Popular:</span>
             {[
               { label: '🚋 Free Tram Zone', tag: 'Free Tram' },
+              { label: '☕ Study & Cat Cafes Blog', tag: 'Cafe Blog' },
               { label: '🍜 Cheap Eats', tag: 'Cheap Eats' },
               { label: '💰 Under $10 Outings', tag: 'Under $10' },
               { label: '🎒 Newcomer Guide', tag: 'Newcomer Guide' },

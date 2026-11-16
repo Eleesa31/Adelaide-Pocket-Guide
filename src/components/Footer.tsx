@@ -70,6 +70,17 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab }) => {
                 </button>
               </li>
               <li>
+                <button
+                  onClick={() => {
+                    onSelectTab('cafe-blog');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="hover:text-[#87A09B] transition-colors cursor-pointer text-left"
+                >
+                  Study, Breakfast &amp; Cat Cafes Blog
+                </button>
+              </li>
+              <li>
                 <button onClick={() => onSelectTab('food')} className="hover:text-[#87A09B] transition-colors cursor-pointer text-left">
                   Bakery on O’Connell (24/7 Student Staple)
                 </button>

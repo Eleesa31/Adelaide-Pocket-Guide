@@ -61,6 +61,9 @@ export interface FoodSpot {
   studentVibe: string;
   description: string;
   featured?: boolean;
+  wifiAvailable?: boolean;
+  studyFriendly?: boolean;
+  imageSrc?: string;
 }
 
 export interface DiscountItem {
