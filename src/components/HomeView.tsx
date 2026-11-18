@@ -156,33 +156,27 @@ export const HomeView: React.FC<HomeViewProps> = ({
   return (
     <div className="space-y-12 sm:space-y-16 pb-16">
       
-      {/* Hero Section: Crisp River Torrens Skyline Backdrop with High Contrast */}
-      <section className="relative border-b border-[#D4DDD9] pt-10 sm:pt-16 pb-14 sm:pb-20 px-4 sm:px-6 lg:px-8">
-        <div className="absolute inset-0 overflow-hidden bg-[#122625]">
+      {/* Hero Section: Softly Translucent River Torrens Backdrop + Crisp Dark Typography */}
+      <section className="relative border-b border-[#D4DDD9] pt-10 sm:pt-14 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8">
+        <div className="absolute inset-0 overflow-hidden bg-[#E6F3F4]">
           <img
             src={riverTorrensImg}
             alt="River Torrens golden hour sunset and Adelaide Oval skyline"
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-cover object-center opacity-25"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0A201F]/65 via-[#0A201F]/45 to-[#0A201F]/75" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#E6F3F4]/70 via-[#EFF4F2]/55 to-[#F7F9F8]/95" />
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto text-center space-y-6">
           
-          {/* Subtle Audience Tag */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/95 text-[#0A868C] border border-white/60 shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-[#0A868C] animate-pulse" />
-            <span>Adelaide International Student Pocket Guide</span>
-          </div>
-
           {/* Simple, welcoming headline */}
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight drop-shadow-sm">
-            Explore Adelaide <span className="text-[#D0A18F]">affordably</span> and with total confidence.
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-[#1A2E2C] tracking-tight leading-tight">
+            Explore Adelaide <span className="text-[#0A868C]">affordably</span> and with total confidence.
           </h1>
 
           {/* Short, reassuring subtitle */}
-          <p className="text-sm sm:text-base text-white/90 max-w-2xl mx-auto leading-relaxed font-normal drop-shadow-xs">
+          <p className="text-sm sm:text-base text-[#2D4543] max-w-2xl mx-auto leading-relaxed font-medium">
             Your simple, stress-free guide to free cultural activities, student food deals, transparent public transport, and making friends in South Australia.
           </p>
 
@@ -320,7 +314,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
           {/* Quick Suggested Topic Chips */}
           <div className="flex flex-wrap items-center justify-center gap-2 pt-1 text-xs">
-            <span className="text-white/90 font-semibold">Popular:</span>
+            <span className="text-[#2D4543] font-semibold">Popular:</span>
             {[
               { label: '🚋 Free Tram Zone', tag: 'Free Tram' },
               { label: '☕ Study & Cat Cafes Blog', tag: 'Cafe Blog' },
@@ -332,7 +326,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 key={chip.label}
                 type="button"
                 onClick={() => handleQuickTagClick(chip.tag)}
-                className="px-3 py-1 rounded-full bg-white/95 hover:bg-white text-[#1A2E2C] hover:text-[#0A868C] border border-white/60 transition-colors font-semibold text-[11px] shadow-xs cursor-pointer"
+                className="px-3 py-1 rounded-full bg-white/95 hover:bg-[#E6F3F4] text-[#1A2E2C] hover:text-[#0A868C] border border-[#87A09B]/40 transition-colors font-semibold text-[11px] shadow-xs cursor-pointer"
               >
                 {chip.label}
               </button>

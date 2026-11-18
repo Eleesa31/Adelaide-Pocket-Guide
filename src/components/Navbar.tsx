@@ -25,10 +25,9 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, onSelectTab, planned
 
   const navItems = [
     { id: 'home', label: 'Home', icon: Compass },
-    { id: 'explore', label: 'Explore Adelaide', icon: MapPin },
+    { id: 'explore', label: 'Explore', icon: MapPin },
     { id: 'food', label: 'Food & Cafes', icon: UtensilsCrossed },
-    { id: 'plan', label: 'Plan Outing', icon: Calculator, badge: plannedCount > 0 ? plannedCount : undefined },
-    { id: 'essentials', label: 'Student Essentials', icon: GraduationCap },
+    { id: 'essentials', label: 'Essentials', icon: GraduationCap },
     { id: 'about', label: 'About & FAQs', icon: Info },
   ];
 
@@ -54,28 +53,28 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, onSelectTab, planned
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-18">
+        <div className="flex items-center justify-between gap-4 h-16 sm:h-18">
           
           {/* Logo & Brand */}
           <button 
             onClick={() => handleNavClick('home')}
             className="flex items-center gap-3 text-left focus:outline-none group cursor-pointer shrink-0"
           >
-            <div className="w-10 h-10 rounded-xl bg-[#0A868C] text-white flex items-center justify-center font-bold shadow-xs group-hover:scale-105 transition-transform shrink-0">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#0A868C] text-white flex items-center justify-center font-bold shadow-xs group-hover:scale-105 transition-transform shrink-0">
               <Bus className="w-5 h-5 text-white" />
             </div>
             <div>
               <span className="text-base sm:text-lg font-bold tracking-tight text-[#1A2E2C] group-hover:text-[#0A868C] transition-colors whitespace-nowrap block">
                 Adelaide Pocket Guide
               </span>
-              <p className="text-[11px] text-[#5B6E6A] hidden sm:block whitespace-nowrap">
+              <p className="text-[11px] text-[#5B6E6A] hidden xl:block whitespace-nowrap">
                 Affordable • Confident • Independent
               </p>
             </div>
           </button>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1">
+          {/* Desktop Navigation (5 crisp links with generous spacing) */}
+          <nav className="hidden lg:flex items-center gap-1.5">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = currentTab === item.id;
@@ -83,7 +82,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, onSelectTab, planned
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`relative flex items-center gap-1.5 px-2.5 xl:px-3.5 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
+                  className={`relative flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
                     isActive
                       ? 'bg-[#0A868C] text-white shadow-xs'
                       : 'text-[#3E5552] hover:text-[#0A868C] hover:bg-[#EFF4F2]'
@@ -91,30 +90,23 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, onSelectTab, planned
                 >
                   <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-[#87A09B]'}`} />
                   <span>{item.label}</span>
-                  {item.badge !== undefined && (
-                    <span className={`px-1.5 py-0.2 rounded-full text-[11px] font-bold ${
-                      isActive ? 'bg-[#D0A18F] text-[#1A2E2C]' : 'bg-[#0A868C] text-white'
-                    }`}>
-                      {item.badge}
-                    </span>
-                  )}
                 </button>
               );
             })}
           </nav>
 
           {/* CTA & Mobile Toggle */}
-          <div className="flex items-center gap-2 sm:gap-2.5">
+          <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={() => handleNavClick('saved')}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border transition-colors cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border transition-colors cursor-pointer whitespace-nowrap ${
                 currentTab === 'saved'
                   ? 'bg-[#D0A18F] border-[#D0A18F] text-[#1A2E2C]'
                   : 'bg-[#FBF4F1] hover:bg-[#D0A18F]/30 border-[#D0A18F]/50 text-[#1A2E2C]'
               }`}
               title="Saved Places for Future Reference"
             >
-              <Heart className={`w-3.5 h-3.5 ${likedCount > 0 ? 'fill-[#B57F6C] text-[#B57F6C]' : 'text-[#B57F6C]'}`} />
+              <Heart className={`w-3.5 h-3.5 shrink-0 ${likedCount > 0 ? 'fill-[#B57F6C] text-[#B57F6C]' : 'text-[#B57F6C]'}`} />
               <span className="hidden sm:inline">Saved</span>
               {likedCount > 0 && (
                 <span className="bg-[#1A2E2C] text-white px-1.5 py-0.2 rounded-full text-[10px] font-black font-mono tabular-nums">
@@ -125,9 +117,13 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, onSelectTab, planned
 
             <button
               onClick={() => handleNavClick('plan')}
-              className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-[#0666A7] hover:bg-[#05548A] text-white shadow-xs transition-colors cursor-pointer"
+              className={`hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold shadow-xs transition-colors cursor-pointer whitespace-nowrap ${
+                currentTab === 'plan'
+                  ? 'bg-[#044B7D] ring-2 ring-[#0666A7]/30 text-white'
+                  : 'bg-[#0666A7] hover:bg-[#05548A] text-white'
+              }`}
             >
-              <Sparkles className="w-3.5 h-3.5 text-[#D0A18F]" />
+              <Calculator className="w-3.5 h-3.5 text-[#D0A18F] shrink-0" />
               <span>Cost Calculator</span>
               {plannedCount > 0 && (
                 <span className="bg-[#D0A18F] text-[#1A2E2C] px-1.5 py-0.2 rounded-full text-[10px] font-black font-mono tabular-nums">
@@ -170,16 +166,27 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, onSelectTab, planned
                   <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[#87A09B]'}`} />
                   <span>{item.label}</span>
                 </div>
-                {item.badge !== undefined && (
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
-                    isActive ? 'bg-[#D0A18F] text-[#1A2E2C]' : 'bg-[#0A868C] text-white'
-                  }`}>
-                    {item.badge}
-                  </span>
-                )}
               </button>
             );
           })}
+          <button
+            onClick={() => handleNavClick('plan')}
+            className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors cursor-pointer ${
+              currentTab === 'plan'
+                ? 'bg-[#0666A7] text-white font-bold'
+                : 'text-[#0666A7] hover:bg-[#EBF4FA]'
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <Sparkles className={`w-4 h-4 ${currentTab === 'plan' ? 'text-[#D0A18F]' : 'text-[#0666A7]'}`} />
+              <span>Outing Cost Calculator</span>
+            </div>
+            {plannedCount > 0 && (
+              <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-[#D0A18F] text-[#1A2E2C]">
+                {plannedCount}
+              </span>
+            )}
+          </button>
           <button
             onClick={() => handleNavClick('saved')}
             className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors cursor-pointer ${
