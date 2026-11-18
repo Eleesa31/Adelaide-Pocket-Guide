@@ -12,8 +12,32 @@ import { Activity, FoodSpot, OutingItem, PreMadeItinerary } from './types';
 import { ACTIVITIES } from './data/activities';
 import { FOOD_PLACES } from './data/foodPlaces';
 
+const VALID_TABS = ['home', 'explore', 'food', 'cafe-blog', 'plan', 'essentials', 'about'];
+
 export default function App() {
-  const [currentTab, setCurrentTab] = useState<string>('home');
+  const [currentTab, setCurrentTab] = useState<string>(() => {
+    const hash = window.location.hash.replace('#', '');
+    return VALID_TABS.includes(hash) ? hash : 'home';
+  });
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (VALID_TABS.includes(hash)) {
+        setCurrentTab(hash);
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  useEffect(() => {
+    const targetHash = `#${currentTab}`;
+    if (window.location.hash !== targetHash) {
+      window.history.replaceState(null, '', targetHash);
+    }
+  }, [currentTab]);
+
   const [modalActivity, setModalActivity] = useState<Activity | null>(null);
   const [initialBudgetFilter, setInitialBudgetFilter] = useState<number | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -131,25 +155,41 @@ export default function App() {
   };
 
   const handleLoadPreMadeItinerary = (itinerary: PreMadeItinerary) => {
+    const alreadyLoaded = plannedItems.some((item) => item.sourcePlanId === itinerary.id);
+    if (alreadyLoaded) {
+      setPlannedItems((prev) => prev.filter((item) => item.sourcePlanId !== itinerary.id));
+      showToast(`Removed "${itinerary.title}" from your plan`);
+      return;
+    }
+
+    const timestamp = Date.now();
     const newItems: OutingItem[] = itinerary.items.map((item, index) => {
-      let matchedActivity = ACTIVITIES.find(a => a.title.toLowerCase().includes(item.title.toLowerCase()));
-      let matchedFood = FOOD_PLACES.find(f => f.name.toLowerCase().includes(item.title.toLowerCase()));
+      const matchedActivity = ACTIVITIES.find((a) =>
+        a.title.toLowerCase().includes(item.title.toLowerCase())
+      );
+      const matchedFood = FOOD_PLACES.find((f) =>
+        f.name.toLowerCase().includes(item.title.toLowerCase())
+      );
 
       return {
-        id: `itin-${Date.now()}-${index}`,
-        refId: matchedActivity?.id || matchedFood?.id || `custom-${index}`,
-        type: item.type === 'food' ? 'food' : 'activity',
+        id: `itin-${itinerary.id}-${timestamp}-${index}`,
+        refId: matchedActivity?.id || matchedFood?.id || `${itinerary.id}-${index}`,
+        sourcePlanId: itinerary.id,
+        type: item.type,
         title: item.title,
-        cost: item.cost,
+        cost: Number(item.cost) || 0,
         locationName: matchedActivity?.locationName || matchedFood?.address || 'Adelaide',
         locationArea: matchedActivity?.locationArea || matchedFood?.locationArea || 'adelaide_cbd',
         transitSummary: item.transitNote || 'Adelaide Metro',
-        transitType: matchedActivity?.transitType || 'tram_free'
+        transitType:
+          item.type === 'transit'
+            ? 'bus_paid'
+            : matchedActivity?.transitType || 'tram_free'
       };
     });
 
-    setPlannedItems(newItems);
-    showToast(`Loaded "${itinerary.title}"!`);
+    setPlannedItems((prev) => [...prev, ...newItems]);
+    showToast(`Added "${itinerary.title}" to your outing!`);
   };
 
   const handleFilterBudgetFromHome = (budgetMax: number) => {

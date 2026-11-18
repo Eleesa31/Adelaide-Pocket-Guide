@@ -93,6 +93,7 @@ export const FoodView: React.FC<FoodViewProps> = ({
         onTogglePlanFood={onTogglePlanFood}
         onBackToDirectory={() => {
           setSubView('directory');
+          onSelectTab('food');
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
         onSelectTab={onSelectTab}
@@ -129,6 +130,7 @@ export const FoodView: React.FC<FoodViewProps> = ({
           <button
             onClick={() => {
               setSubView('blog');
+              onSelectTab('cafe-blog');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             className="px-3.5 py-2 rounded-lg text-xs font-semibold text-[#475E5A] hover:text-[#0A868C] transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
@@ -143,6 +145,7 @@ export const FoodView: React.FC<FoodViewProps> = ({
       <div
         onClick={() => {
           setSubView('blog');
+          onSelectTab('cafe-blog');
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
         className="group bg-white border border-[#D4DDD9] hover:border-[#0A868C] rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all grid grid-cols-1 md:grid-cols-12 cursor-pointer"

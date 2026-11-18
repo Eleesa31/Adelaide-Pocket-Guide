@@ -80,8 +80,9 @@ export interface DiscountItem {
 
 export interface OutingItem {
   id: string;
-  type: 'activity' | 'food';
+  type: 'activity' | 'food' | 'transit';
   refId: string;
+  sourcePlanId?: string;
   title: string;
   cost: number;
   locationName: string;
