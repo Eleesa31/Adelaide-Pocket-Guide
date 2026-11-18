@@ -3,15 +3,14 @@ import {
   Search, 
   Sparkles, 
   Compass, 
-  MapPin, 
   Bus, 
   ArrowRight, 
   Heart, 
   Utensils, 
   Calculator, 
   GraduationCap, 
-  Clock,
-  DollarSign,
+  Calendar,
+  MapPin,
   X
 } from 'lucide-react';
 import { Activity } from '../types';
@@ -24,12 +23,14 @@ import {
   riverTorrensImg
 } from '../data/activities';
 import { FOOD_PLACES } from '../data/foodPlaces';
+import { CITY_EVENTS } from '../data/cityEvents';
 
 interface HomeViewProps {
   onSelectTab: (tab: string) => void;
   onOpenActivity: (activity: Activity) => void;
   onFilterBudget: (budgetMax: number) => void;
   onSearch: (query: string, forceTarget?: 'explore' | 'food') => void;
+  onOpenEventsModal: () => void;
   plannedIds: string[];
   onTogglePlanActivity: (activity: Activity) => void;
   likedIds: string[];
@@ -41,6 +42,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
   onOpenActivity,
   onFilterBudget,
   onSearch,
+  onOpenEventsModal,
   plannedIds,
   onTogglePlanActivity,
   likedIds,
@@ -137,7 +139,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
   };
 
   const handleQuickTagClick = (tag: string) => {
-    if (tag === 'Free Tram') {
+    if (tag === 'City Events') {
+      onOpenEventsModal();
+    } else if (tag === 'Free Tram') {
       onSelectTab('essentials');
     } else if (tag === 'Under $10') {
       onFilterBudget(10);
@@ -156,16 +160,17 @@ export const HomeView: React.FC<HomeViewProps> = ({
   return (
     <div className="space-y-12 sm:space-y-16 pb-16">
       
-      {/* Hero Section: Softly Translucent River Torrens Backdrop + Crisp Dark Typography */}
-      <section className="relative border-b border-[#D4DDD9] pt-10 sm:pt-14 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8">
-        <div className="absolute inset-0 overflow-hidden bg-[#E6F3F4]">
+      {/* Hero Section: Softly Translucent River Torrens Backdrop with Seamless Feather Fade */}
+      <section className="relative pt-10 sm:pt-14 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8">
+        <div className="absolute inset-0 overflow-hidden bg-gradient-to-b from-[#E6F3F4] via-[#EFF4F2] to-[#F7F9F8] pointer-events-none">
           <img
             src={riverTorrensImg}
             alt="River Torrens golden hour sunset and Adelaide Oval skyline"
             className="w-full h-full object-cover object-center opacity-25"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#E6F3F4]/70 via-[#EFF4F2]/55 to-[#F7F9F8]/95" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#E6F3F4]/65 via-[#EFF4F2]/55 via-60% to-[#F7F9F8]" />
+          <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#F7F9F8] via-[#F7F9F8]/90 via-40% to-transparent" />
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto text-center space-y-6">
@@ -316,6 +321,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
           <div className="flex flex-wrap items-center justify-center gap-2 pt-1 text-xs">
             <span className="text-[#2D4543] font-semibold">Popular:</span>
             {[
+              { label: '🎉 City Events', tag: 'City Events' },
               { label: '🚋 Free Tram Zone', tag: 'Free Tram' },
               { label: '☕ Study & Cat Cafes Blog', tag: 'Cafe Blog' },
               { label: '🍜 Cheap Eats', tag: 'Cheap Eats' },
@@ -326,7 +332,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 key={chip.label}
                 type="button"
                 onClick={() => handleQuickTagClick(chip.tag)}
-                className="px-3 py-1 rounded-full bg-white/95 hover:bg-[#E6F3F4] text-[#1A2E2C] hover:text-[#0A868C] border border-[#87A09B]/40 transition-colors font-semibold text-[11px] shadow-xs cursor-pointer"
+                className="px-3 py-1 rounded-full bg-white/95 hover:bg-[#E6F3F4] text-[#1A2E2C] hover:text-[#0A868C] border border-[#87A09B]/40 transition-colors font-semibold text-[11px] shadow-xs cursor-pointer whitespace-nowrap"
               >
                 {chip.label}
               </button>
@@ -505,6 +511,79 @@ export const HomeView: React.FC<HomeViewProps> = ({
               <span className="text-[#5B6E6A] text-[10px]">Ring around the CBD</span>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* What's On Next in Adelaide: Near-Future City Events & Festivals Spotlight */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-5">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 text-xs font-semibold text-[#B57F6C]">
+              <Calendar className="w-3.5 h-3.5" />
+              <span>Upcoming in Adelaide (Nov 2026 – Early 2027)</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-bold text-[#1A2E2C] tracking-tight">
+              What&apos;s On Next: Upcoming Events &amp; Pop-Ups
+            </h2>
+            <p className="text-xs text-[#5B6E6A]">
+              From Supercars 500 concerts and Carols by Candlelight to New Year&apos;s Eve fireworks and Summer Fringe—see student tips and Free Tram stops.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onOpenEventsModal}
+            className="px-4 py-2 rounded-xl bg-[#0A868C] hover:bg-[#076E73] text-white text-xs font-bold flex items-center gap-1.5 self-start sm:self-auto transition-colors shadow-xs cursor-pointer whitespace-nowrap shrink-0"
+          >
+            <span>Open City Events Pop-Up ({CITY_EVENTS.length})</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {CITY_EVENTS.slice(0, 3).map((ev) => (
+            <button
+              key={ev.id}
+              type="button"
+              onClick={onOpenEventsModal}
+              className="text-left bg-white hover:bg-[#E6F3F4]/40 border border-[#D4DDD9] hover:border-[#0A868C] rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between group cursor-pointer"
+            >
+              <div>
+                <div className="relative h-40 w-full bg-[#0A868C] overflow-hidden">
+                  <img
+                    src={ev.imageSrc}
+                    alt={ev.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
+                  <div className="absolute bottom-2.5 left-3 right-3 text-white">
+                    <span className="block text-[10px] font-bold text-[#E6F3F4]">
+                      {ev.statusBadge} · {ev.dateWindow}
+                    </span>
+                    <h3 className="font-bold text-sm sm:text-base leading-snug drop-shadow-sm line-clamp-1 text-white">
+                      {ev.title}
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="p-4 pb-3 space-y-1.5">
+                  <p className="text-xs text-[#475E5A] leading-relaxed line-clamp-2">
+                    {ev.summary}
+                  </p>
+                </div>
+              </div>
+
+              <div className="px-4 py-3 border-t border-[#EFF4F2] flex items-center justify-between gap-2 text-[11px]">
+                <span className="text-[#5B6E6A] flex items-center gap-1 truncate">
+                  <MapPin className="w-3 h-3 text-[#B57F6C] shrink-0" />
+                  <span className="truncate">{ev.location}</span>
+                </span>
+                <span className="font-bold text-[#0666A7] shrink-0 group-hover:underline">
+                  View details →
+                </span>
+              </div>
+            </button>
+          ))}
         </div>
       </section>
 

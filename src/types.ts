@@ -121,3 +121,15 @@ export interface LikedItem {
   imageSrc?: string;
   savedAt: number;
 }
+
+export interface FeedbackEntry {
+  id: string;
+  name: string;
+  email?: string;
+  institution: string;
+  category: string;
+  message: string;
+  status: 'new' | 'reviewed' | 'added';
+  createdAt: number;
+}
+

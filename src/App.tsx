@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Calendar, ArrowRight, X } from 'lucide-react';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { HomeView } from './components/HomeView';
@@ -9,9 +10,11 @@ import { EssentialsView } from './components/EssentialsView';
 import { AboutContactView } from './components/AboutContactView';
 import { SavedView } from './components/SavedView';
 import { ActivityModal } from './components/ActivityModal';
+import { CityEventsModal } from './components/CityEventsPopup';
 import { Activity, FoodSpot, LikedItem, OutingItem, PreMadeItinerary } from './types';
 import { ACTIVITIES } from './data/activities';
 import { FOOD_PLACES } from './data/foodPlaces';
+import { CITY_EVENTS, CityEvent } from './data/cityEvents';
 
 const VALID_TABS = ['home', 'explore', 'food', 'cafe-blog', 'plan', 'saved', 'essentials', 'about'];
 
@@ -40,6 +43,14 @@ export default function App() {
   }, [currentTab]);
 
   const [modalActivity, setModalActivity] = useState<Activity | null>(null);
+  const [eventsModalOpen, setEventsModalOpen] = useState(false);
+  const [eventsBannerDismissed, setEventsBannerDismissed] = useState<boolean>(() => {
+    try {
+      return sessionStorage.getItem('adelaide_events_banner_dismissed') === 'true';
+    } catch {
+      return false;
+    }
+  });
   const [initialBudgetFilter, setInitialBudgetFilter] = useState<number | null>(null);
   const [exploreSearchQuery, setExploreSearchQuery] = useState<string>('');
   const [foodSearchQuery, setFoodSearchQuery] = useState<string>('');
@@ -236,6 +247,37 @@ export default function App() {
     showToast(`Added custom item "${item.title}"`);
   };
 
+  const handleTogglePlanEvent = (event: CityEvent) => {
+    const existingIndex = plannedItems.findIndex((i) => i.refId === event.id);
+    if (existingIndex >= 0) {
+      setPlannedItems((prev) => prev.filter((i) => i.refId !== event.id));
+      showToast(`Removed "${event.title}" from Outing Plan`);
+    } else {
+      const newItem: OutingItem = {
+        id: `plan-${Date.now()}-${event.id}`,
+        refId: event.id,
+        type: 'activity',
+        title: event.title,
+        cost: event.costValue,
+        locationName: event.location,
+        locationArea: 'adelaide_cbd',
+        transitSummary: event.transitTip,
+        transitType: 'tram_free'
+      };
+      setPlannedItems((prev) => [...prev, newItem]);
+      showToast(`Added "${event.title}" to Outing Plan!`);
+    }
+  };
+
+  const handleDismissEventsBanner = () => {
+    setEventsBannerDismissed(true);
+    try {
+      sessionStorage.setItem('adelaide_events_banner_dismissed', 'true');
+    } catch {
+      // ignore
+    }
+  };
+
   const handleLoadPreMadeItinerary = (itinerary: PreMadeItinerary) => {
     const alreadyLoaded = plannedItems.some((item) => item.sourcePlanId === itinerary.id);
     if (alreadyLoaded) {
@@ -374,6 +416,7 @@ export default function App() {
             onOpenActivity={setModalActivity}
             onFilterBudget={handleFilterBudgetFromHome}
             onSearch={handleSearchFromHome}
+            onOpenEventsModal={() => setEventsModalOpen(true)}
             plannedIds={plannedRefIds}
             onTogglePlanActivity={handleTogglePlanActivity}
             likedIds={likedIds}
@@ -457,6 +500,60 @@ export default function App() {
         onToggleLike={(act) => {
           handleToggleLikeActivity(act);
         }}
+      />
+
+      {/* Floating Compact City Events Pop-Up Card (Home tab, dismissible) */}
+      {currentTab === 'home' && !eventsBannerDismissed && !eventsModalOpen && (
+        <div className="fixed bottom-4 left-4 z-40 max-w-xs w-[calc(100%-2rem)] sm:w-80 bg-white border border-[#0A868C]/35 rounded-2xl shadow-xl overflow-hidden">
+          <div className="relative h-24 w-full bg-[#0A868C]">
+            <img
+              src={CITY_EVENTS[0].imageSrc}
+              alt={CITY_EVENTS[0].title}
+              className="w-full h-full object-cover"
+              referrerPolicy="no-referrer"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/10" />
+            <button
+              type="button"
+              onClick={handleDismissEventsBanner}
+              className="absolute top-2 right-2 p-1 rounded-full bg-black/45 hover:bg-black/70 text-white transition-colors cursor-pointer"
+              aria-label="Dismiss upcoming events pop-up"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+            <div className="absolute bottom-2 left-3 right-3 text-white">
+              <div className="flex items-center gap-1 text-[10px] font-bold text-[#E6F3F4]">
+                <Calendar className="w-3 h-3 shrink-0" />
+                <span>Next Up in Adelaide</span>
+              </div>
+              <p className="text-xs font-extrabold leading-tight truncate">
+                Supercars 500, Carols &amp; NYE Fireworks
+              </p>
+            </div>
+          </div>
+
+          <div className="p-3.5 space-y-2.5">
+            <p className="text-[11px] text-[#5B6E6A] leading-relaxed">
+              Starting Nov 26: see upcoming concerts, free Elder Park fireworks &amp; summer festivals.
+            </p>
+            <button
+              type="button"
+              onClick={() => setEventsModalOpen(true)}
+              className="w-full py-2 px-3 rounded-xl bg-[#0A868C] hover:bg-[#076E73] text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <span>See Upcoming Events ({CITY_EVENTS.length})</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Full City Events Pop-Up Modal */}
+      <CityEventsModal
+        isOpen={eventsModalOpen}
+        onClose={() => setEventsModalOpen(false)}
+        plannedIds={plannedRefIds}
+        onAddEventToPlan={handleTogglePlanEvent}
       />
 
     </div>

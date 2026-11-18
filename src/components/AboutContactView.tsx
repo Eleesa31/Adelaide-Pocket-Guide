@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Info, 
   HelpCircle, 
@@ -7,14 +7,22 @@ import {
   ChevronUp, 
   Send, 
   CheckCircle2, 
-  Sparkles, 
   Mail, 
   Compass, 
-  ShieldCheck,
   Heart,
-  DollarSign
+  DollarSign,
+  ExternalLink,
+  Copy,
+  Check,
+  Download,
+  Trash2,
+  ClipboardList
 } from 'lucide-react';
 import { FAQS_DATA } from '../data/faqs';
+import { FeedbackEntry } from '../types';
+
+const OWNER_EMAIL = 'eleesaanil2001@gmail.com';
+const GITHUB_ISSUES_URL = 'https://github.com/Eleesa31/Adelaide-Pocket-Guide/issues/new';
 
 export const AboutContactView: React.FC = () => {
   const [openFaqId, setOpenFaqId] = useState<string | null>('faq-1');
@@ -26,7 +34,29 @@ export const AboutContactView: React.FC = () => {
   const [formInstitution, setFormInstitution] = useState('University of Adelaide');
   const [formCategory, setFormCategory] = useState('Feedback & Suggestion');
   const [formMessage, setFormMessage] = useState('');
-  const [submittedMessage, setSubmittedMessage] = useState(false);
+  const [lastSubmitted, setLastSubmitted] = useState<FeedbackEntry | null>(null);
+  const [copiedSubmission, setCopiedSubmission] = useState(false);
+
+  // Saved feedback review log (persisted in browser localStorage)
+  const [feedbackLog, setFeedbackLog] = useState<FeedbackEntry[]>(() => {
+    try {
+      const saved = localStorage.getItem('adelaide_pocket_feedback');
+      if (saved) return JSON.parse(saved);
+    } catch {
+      // ignore
+    }
+    return [];
+  });
+  const [showReviewPanel, setShowReviewPanel] = useState(false);
+  const [statusFilter, setStatusFilter] = useState<'all' | 'new' | 'reviewed' | 'added'>('all');
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('adelaide_pocket_feedback', JSON.stringify(feedbackLog));
+    } catch {
+      // ignore
+    }
+  }, [feedbackLog]);
 
   const toggleFaq = (id: string) => {
     setOpenFaqId(openFaqId === id ? null : id);
@@ -43,14 +73,102 @@ export const AboutContactView: React.FC = () => {
     e.preventDefault();
     if (!formName.trim() || !formMessage.trim()) return;
 
-    // Simulate submission
-    setSubmittedMessage(true);
-    setTimeout(() => {
-      setFormName('');
-      setFormEmail('');
-      setFormMessage('');
-    }, 400);
+    const newEntry: FeedbackEntry = {
+      id: `fb-${Date.now()}`,
+      name: formName.trim(),
+      email: formEmail.trim() || undefined,
+      institution: formInstitution,
+      category: formCategory,
+      message: formMessage.trim(),
+      status: 'new',
+      createdAt: Date.now()
+    };
+
+    setFeedbackLog((prev) => [newEntry, ...prev]);
+    setLastSubmitted(newEntry);
+    setFormName('');
+    setFormEmail('');
+    setFormMessage('');
   };
+
+  const buildMailtoHref = (entry: FeedbackEntry) => {
+    const subject = `[Adelaide Pocket Guide] ${entry.category} from ${entry.name}`;
+    const body = [
+      `Name: ${entry.name}`,
+      `Institution: ${entry.institution}`,
+      `Reply Email: ${entry.email || 'Not provided'}`,
+      `Topic: ${entry.category}`,
+      '',
+      'Message / Recommendation:',
+      entry.message
+    ].join('\n');
+    return `mailto:${OWNER_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
+  const buildGithubIssueHref = (entry: FeedbackEntry) => {
+    const title = `[${entry.category}] ${entry.message.slice(0, 65)}${entry.message.length > 65 ? '...' : ''}`;
+    const body = [
+      `### Community Feedback / Suggestion`,
+      `- **Submitted By:** ${entry.name}`,
+      `- **Institution:** ${entry.institution}`,
+      `- **Topic:** ${entry.category}`,
+      `- **Contact Email:** ${entry.email || 'Not provided'}`,
+      '',
+      `### Details`,
+      entry.message
+    ].join('\n');
+    return `${GITHUB_ISSUES_URL}?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
+  };
+
+  const handleCopyEntry = (entry: FeedbackEntry) => {
+    const text = [
+      `[Adelaide Pocket Guide — ${entry.category}]`,
+      `From: ${entry.name} (${entry.institution})`,
+      `Email: ${entry.email || 'Not provided'}`,
+      `Date: ${new Date(entry.createdAt).toLocaleString()}`,
+      `Message: ${entry.message}`
+    ].join('\n');
+    navigator.clipboard?.writeText(text);
+    setCopiedSubmission(true);
+    setTimeout(() => setCopiedSubmission(false), 2200);
+  };
+
+  const handleUpdateStatus = (id: string, status: FeedbackEntry['status']) => {
+    setFeedbackLog((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, status } : item))
+    );
+  };
+
+  const handleDeleteEntry = (id: string) => {
+    setFeedbackLog((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const handleExportCsv = () => {
+    if (feedbackLog.length === 0) return;
+    const escapeCsv = (val: string) => `"${val.replace(/"/g, '""')}"`;
+    const headers = ['Date', 'Status', 'Topic', 'Name', 'Institution', 'Email', 'Message'];
+    const rows = feedbackLog.map((item) => [
+      new Date(item.createdAt).toISOString(),
+      item.status,
+      item.category,
+      item.name,
+      item.institution,
+      item.email || '',
+      item.message
+    ]);
+    const csvContent = [headers, ...rows].map((r) => r.map(escapeCsv).join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `adelaide-pocket-guide-feedback-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const filteredFeedback = feedbackLog.filter((item) =>
+    statusFilter === 'all' ? true : item.status === statusFilter
+  );
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
@@ -178,35 +296,80 @@ export const AboutContactView: React.FC = () => {
       </div>
 
       {/* Feedback & Contact Form */}
-      <div className="bg-white border border-[#87A09B]/20 rounded-3xl p-6 sm:p-10 shadow-sm space-y-6">
-        <div className="space-y-2 max-w-2xl">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FBF4F1] text-[#D0A18F]">
-            <MessageSquare className="w-3.5 h-3.5 text-[#D0A18F]" />
-            <span>Community Feedback & Support</span>
+      <div className="bg-white border border-[#D4DDD9] rounded-3xl p-6 sm:p-10 shadow-xs space-y-6">
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+          <div className="space-y-2 max-w-2xl">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FBF4F1] text-[#B57F6C]">
+              <MessageSquare className="w-3.5 h-3.5 text-[#B57F6C]" />
+              <span>Community Feedback & Support</span>
+            </div>
+            <h2 className="text-2xl font-bold tracking-tight text-[#1A2E2C]">
+              Have Feedback, a Question or a Hidden Gem to Share?
+            </h2>
+            <p className="text-xs sm:text-sm text-[#5B6E6A]">
+              Did you find a fantastic new $10 student lunch deal or an awesome sunset lookout? Save your note below or send it directly via email or GitHub Issues so we can review and update the guide.
+            </p>
           </div>
-          <h2 className="text-2xl font-bold tracking-tight text-[#1A2E2C]">
-            Have Feedback, a Question or a Hidden Gem to Share?
-          </h2>
-          <p className="text-xs sm:text-sm text-[#5B6E6A]">
-            Did you find a fantastic new $10 student lunch deal or an awesome sunset lookout? We regularly update Adelaide Pocket Guide with community suggestions.
-          </p>
+
+          <button
+            type="button"
+            onClick={() => setShowReviewPanel(!showReviewPanel)}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-[#EFF4F2] hover:bg-[#D4DDD9] text-[#1A2E2C] border border-[#D4DDD9] transition-colors shrink-0 self-start cursor-pointer"
+          >
+            <ClipboardList className="w-4 h-4 text-[#0A868C]" />
+            <span>Review Submitted Notes ({feedbackLog.length})</span>
+            {showReviewPanel ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+          </button>
         </div>
 
-        {submittedMessage ? (
-          <div className="p-6 bg-[#E6F3F4] border border-[#0A868C]/30 rounded-2xl text-center space-y-3 animate-fadeIn">
-            <CheckCircle2 className="w-10 h-10 text-[#0A868C] mx-auto" />
-            <h3 className="text-base font-bold text-[#0A868C]">
-              Thank you! Your feedback has been received.
-            </h3>
-            <p className="text-xs text-[#475E5A] max-w-md mx-auto">
-              We review every recommendation to help fellow international students enjoy Adelaide safely and affordably.
-            </p>
-            <button
-              onClick={() => setSubmittedMessage(false)}
-              className="px-4 py-2 bg-[#0A868C] text-white rounded-xl text-xs font-bold hover:bg-[#076E73] transition-colors"
-            >
-              Send Another Note
-            </button>
+        {lastSubmitted ? (
+          <div className="p-6 bg-[#E6F3F4] border border-[#0A868C]/30 rounded-2xl space-y-4">
+            <div className="text-center space-y-2">
+              <CheckCircle2 className="w-10 h-10 text-[#0A868C] mx-auto" />
+              <h3 className="text-base font-bold text-[#0A868C]">
+                Note Saved! Choose how to send it to the site maintainer:
+              </h3>
+              <p className="text-xs text-[#475E5A] max-w-lg mx-auto leading-relaxed">
+                Your submission is saved in this browser&apos;s Review Queue below. Because this site runs statically on GitHub Pages without a cloud database, use one of the direct delivery buttons below so the maintainer receives your feedback right away:
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-center gap-2.5 pt-1">
+              <a
+                href={buildMailtoHref(lastSubmitted)}
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#0A868C] hover:bg-[#076E73] text-white text-xs font-bold transition-colors shadow-xs"
+              >
+                <Mail className="w-3.5 h-3.5" />
+                <span>Send via Email ({OWNER_EMAIL})</span>
+              </a>
+
+              <a
+                href={buildGithubIssueHref(lastSubmitted)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#0666A7] hover:bg-[#05548A] text-white text-xs font-bold transition-colors shadow-xs"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>Submit on GitHub Issues</span>
+              </a>
+
+              <button
+                type="button"
+                onClick={() => handleCopyEntry(lastSubmitted)}
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white hover:bg-[#EFF4F2] text-[#1A2E2C] border border-[#D4DDD9] text-xs font-semibold transition-colors cursor-pointer"
+              >
+                {copiedSubmission ? <Check className="w-3.5 h-3.5 text-[#0A868C]" /> : <Copy className="w-3.5 h-3.5 text-[#5B6E6A]" />}
+                <span>{copiedSubmission ? 'Copied Note' : 'Copy Text'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setLastSubmitted(null)}
+                className="px-4 py-2.5 rounded-xl text-xs font-semibold text-[#5B6E6A] hover:text-[#1A2E2C] hover:bg-white/70 transition-colors cursor-pointer"
+              >
+                Write Another Note
+              </button>
+            </div>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4 max-w-2xl">
@@ -221,7 +384,7 @@ export const AboutContactView: React.FC = () => {
                   placeholder="e.g. Maria or Ken"
                   value={formName}
                   onChange={(e) => setFormName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#87A09B]/30 text-xs sm:text-sm text-[#1A2E2C] focus:outline-none focus:border-[#0A868C] focus:ring-1 focus:ring-[#0A868C]/30"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#D4DDD9] text-xs sm:text-sm text-[#1A2E2C] focus:outline-none focus:border-[#0A868C] focus:ring-1 focus:ring-[#0A868C]/30"
                 />
               </div>
 
@@ -234,7 +397,7 @@ export const AboutContactView: React.FC = () => {
                   placeholder="e.g. student@uni.edu.au"
                   value={formEmail}
                   onChange={(e) => setFormEmail(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#87A09B]/30 text-xs sm:text-sm text-[#1A2E2C] focus:outline-none focus:border-[#0A868C] focus:ring-1 focus:ring-[#0A868C]/30"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#D4DDD9] text-xs sm:text-sm text-[#1A2E2C] focus:outline-none focus:border-[#0A868C] focus:ring-1 focus:ring-[#0A868C]/30"
                 />
               </div>
             </div>
@@ -247,7 +410,7 @@ export const AboutContactView: React.FC = () => {
                 <select
                   value={formInstitution}
                   onChange={(e) => setFormInstitution(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#87A09B]/30 text-xs sm:text-sm text-[#1A2E2C] bg-white focus:outline-none focus:border-[#0A868C] cursor-pointer"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#D4DDD9] text-xs sm:text-sm text-[#1A2E2C] bg-white focus:outline-none focus:border-[#0A868C] cursor-pointer"
                 >
                   <option value="University of Adelaide">University of Adelaide</option>
                   <option value="UniSA">University of South Australia (UniSA)</option>
@@ -265,7 +428,7 @@ export const AboutContactView: React.FC = () => {
                 <select
                   value={formCategory}
                   onChange={(e) => setFormCategory(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#87A09B]/30 text-xs sm:text-sm text-[#1A2E2C] bg-white focus:outline-none focus:border-[#0A868C] cursor-pointer"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#D4DDD9] text-xs sm:text-sm text-[#1A2E2C] bg-white focus:outline-none focus:border-[#0A868C] cursor-pointer"
                 >
                   <option value="Feedback & Suggestion">General Feedback & Suggestion</option>
                   <option value="Submit a Gem">Submit a Secret Spot or Student Deal</option>
@@ -285,7 +448,7 @@ export const AboutContactView: React.FC = () => {
                 placeholder="Share your thoughts, recommend an affordable bakery or ask a question..."
                 value={formMessage}
                 onChange={(e) => setFormMessage(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#87A09B]/30 text-xs sm:text-sm text-[#1A2E2C] focus:outline-none focus:border-[#0A868C] focus:ring-1 focus:ring-[#0A868C]/30 resize-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#D4DDD9] text-xs sm:text-sm text-[#1A2E2C] focus:outline-none focus:border-[#0A868C] focus:ring-1 focus:ring-[#0A868C]/30 resize-none"
               />
             </div>
 
@@ -294,9 +457,126 @@ export const AboutContactView: React.FC = () => {
               className="px-6 py-3 rounded-xl bg-[#0A868C] hover:bg-[#076E73] text-white font-bold text-xs sm:text-sm flex items-center gap-2 transition-colors shadow-sm cursor-pointer"
             >
               <Send className="w-4 h-4" />
-              <span>Submit to Adelaide Pocket Guide</span>
+              <span>Save &amp; Prepare Feedback</span>
             </button>
           </form>
+        )}
+
+        {/* Owner Review Queue & Delivery Channels */}
+        {showReviewPanel && (
+          <div className="pt-6 border-t border-[#EFF4F2] space-y-5">
+            <div className="bg-[#F7F9F8] border border-[#D4DDD9] rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="space-y-1">
+                <h3 className="text-sm font-bold text-[#1A2E2C]">
+                  How to Access &amp; Review Feedback
+                </h3>
+                <p className="text-xs text-[#475E5A] leading-relaxed max-w-2xl">
+                  Submissions below are stored locally in <strong>this browser</strong>. Feedback sent from other students&apos; devices arrives via email (<strong>{OWNER_EMAIL}</strong>) or your repository&apos;s{' '}
+                  <a
+                    href="https://github.com/Eleesa31/Adelaide-Pocket-Guide/issues"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#0666A7] font-semibold underline"
+                  >
+                    GitHub Issues tab
+                  </a>.
+                </p>
+              </div>
+              {feedbackLog.length > 0 && (
+                <button
+                  type="button"
+                  onClick={handleExportCsv}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-[#EFF4F2] border border-[#D4DDD9] text-xs font-bold text-[#1A2E2C] shrink-0 self-start sm:self-auto cursor-pointer"
+                >
+                  <Download className="w-3.5 h-3.5 text-[#0A868C]" />
+                  <span>Export CSV</span>
+                </button>
+              )}
+            </div>
+
+            {feedbackLog.length > 0 && (
+              <div className="flex flex-wrap items-center gap-1.5">
+                {[
+                  { id: 'all', label: `All (${feedbackLog.length})` },
+                  { id: 'new', label: `New (${feedbackLog.filter((i) => i.status === 'new').length})` },
+                  { id: 'reviewed', label: `Reviewed (${feedbackLog.filter((i) => i.status === 'reviewed').length})` },
+                  { id: 'added', label: `Added to Guide (${feedbackLog.filter((i) => i.status === 'added').length})` },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setStatusFilter(tab.id as any)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${
+                      statusFilter === tab.id
+                        ? 'bg-[#0A868C] text-white'
+                        : 'bg-[#EFF4F2] text-[#475E5A] hover:bg-[#D4DDD9]'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {filteredFeedback.length === 0 ? (
+              <div className="p-6 text-center rounded-2xl border border-dashed border-[#D4DDD9] text-xs text-[#5B6E6A]">
+                No feedback entries stored in this browser yet. Submit a test note above to see it appear here.
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {filteredFeedback.map((entry) => (
+                  <div
+                    key={entry.id}
+                    className="bg-white border border-[#D4DDD9] rounded-2xl p-4 space-y-3"
+                  >
+                    <div className="flex flex-wrap items-start justify-between gap-2">
+                      <div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="font-bold text-sm text-[#1A2E2C]">{entry.name}</span>
+                          <span className="text-[11px] px-2 py-0.5 rounded-full bg-[#EFF4F2] text-[#475E5A] font-medium">
+                            {entry.institution}
+                          </span>
+                          <span className="text-[11px] px-2 py-0.5 rounded-full bg-[#FBF4F1] text-[#B57F6C] font-semibold">
+                            {entry.category}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-[#5B6E6A] mt-0.5">
+                          {new Date(entry.createdAt).toLocaleString()}
+                          {entry.email ? ` • ${entry.email}` : ''}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <select
+                          value={entry.status}
+                          onChange={(e) => handleUpdateStatus(entry.id, e.target.value as FeedbackEntry['status'])}
+                          className="px-2.5 py-1 rounded-lg border border-[#D4DDD9] text-xs font-semibold text-[#1A2E2C] bg-white cursor-pointer"
+                          aria-label="Update feedback status"
+                        >
+                          <option value="new">New</option>
+                          <option value="reviewed">Reviewed</option>
+                          <option value="added">Added to Guide</option>
+                        </select>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteEntry(entry.id)}
+                          className="p-1.5 rounded-lg text-[#87A09B] hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                          title="Delete feedback note"
+                          aria-label="Delete feedback note"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+
+                    <p className="text-xs sm:text-sm text-[#2D4543] leading-relaxed bg-[#F7F9F8] p-3 rounded-xl border border-[#EFF4F2]">
+                      {entry.message}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         )}
       </div>
 
