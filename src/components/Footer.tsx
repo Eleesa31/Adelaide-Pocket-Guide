@@ -90,6 +90,17 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab }) => {
                   Interactive Outing Cost Calculator
                 </button>
               </li>
+              <li>
+                <button
+                  onClick={() => {
+                    onSelectTab('saved');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="hover:text-[#87A09B] transition-colors cursor-pointer text-left"
+                >
+                  My Saved Places (Bookmarks)
+                </button>
+              </li>
             </ul>
           </div>
 

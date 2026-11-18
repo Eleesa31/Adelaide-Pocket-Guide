@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
   Search, 
   MapPin, 
@@ -11,7 +11,8 @@ import {
   Check, 
   SlidersHorizontal,
   Compass,
-  ArrowUpDown
+  ArrowUpDown,
+  X
 } from 'lucide-react';
 import { Activity, ActivityInterest, LocationArea } from '../types';
 import { ACTIVITIES } from '../data/activities';
@@ -20,7 +21,11 @@ interface ExploreViewProps {
   onOpenActivity: (activity: Activity) => void;
   plannedIds: string[];
   onTogglePlanActivity: (activity: Activity) => void;
+  likedIds: string[];
+  onToggleLikeActivity: (activity: Activity) => void;
   initialBudgetFilter?: number | null;
+  initialSearchQuery?: string;
+  searchTriggerKey?: number;
   onSelectTab: (tab: string) => void;
 }
 
@@ -28,10 +33,14 @@ export const ExploreView: React.FC<ExploreViewProps> = ({
   onOpenActivity,
   plannedIds,
   onTogglePlanActivity,
+  likedIds,
+  onToggleLikeActivity,
   initialBudgetFilter = null,
+  initialSearchQuery = '',
+  searchTriggerKey = 0,
   onSelectTab
 }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(initialSearchQuery);
   const [selectedCategory, setSelectedCategory] = useState<ActivityInterest>('all');
   const [selectedLocation, setSelectedLocation] = useState<LocationArea>('all');
   const [selectedBudgetTier, setSelectedBudgetTier] = useState<string>(
@@ -39,6 +48,18 @@ export const ExploreView: React.FC<ExploreViewProps> = ({
   );
   const [selectedStyle, setSelectedStyle] = useState<'all' | 'solo' | 'social' | 'newcomer'>('all');
   const [sortBy, setSortBy] = useState<'featured' | 'cost_asc' | 'cost_desc' | 'name'>('featured');
+
+  useEffect(() => {
+    setSearchTerm(initialSearchQuery);
+    if (initialSearchQuery.trim()) {
+      setSelectedCategory('all');
+      setSelectedLocation('all');
+      setSelectedBudgetTier('all');
+      setSelectedStyle('all');
+    } else if (initialBudgetFilter !== null) {
+      setSelectedBudgetTier(String(initialBudgetFilter));
+    }
+  }, [initialSearchQuery, initialBudgetFilter, searchTriggerKey]);
 
   const categories: Array<{ id: ActivityInterest; label: string }> = [
     { id: 'all', label: 'All Interests' },
@@ -67,10 +88,27 @@ export const ExploreView: React.FC<ExploreViewProps> = ({
       if (searchTerm.trim()) {
         const q = searchTerm.toLowerCase();
         const matchesTitle = act.title.toLowerCase().includes(q);
+        const matchesCategory = act.categoryLabel.toLowerCase().includes(q);
         const matchesDesc = act.description.toLowerCase().includes(q);
         const matchesLoc = act.locationName.toLowerCase().includes(q);
+        const matchesAddress = act.address.toLowerCase().includes(q);
         const matchesTip = act.studentTip.toLowerCase().includes(q);
-        if (!matchesTitle && !matchesDesc && !matchesLoc && !matchesTip) return false;
+        const matchesTransit = act.transitSummary.toLowerCase().includes(q);
+        const matchesTag = act.highlightTag ? act.highlightTag.toLowerCase().includes(q) : false;
+        const matchesFood = act.nearbyFood ? act.nearbyFood.toLowerCase().includes(q) : false;
+        if (
+          !matchesTitle &&
+          !matchesCategory &&
+          !matchesDesc &&
+          !matchesLoc &&
+          !matchesAddress &&
+          !matchesTip &&
+          !matchesTransit &&
+          !matchesTag &&
+          !matchesFood
+        ) {
+          return false;
+        }
       }
 
       // Style filter: solo vs social vs newcomer
@@ -159,8 +197,18 @@ export const ExploreView: React.FC<ExploreViewProps> = ({
               placeholder="Search by name, beach, museum, park, koalas, or tram line..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#D4DDD9] text-xs sm:text-sm text-[#1A2E2C] focus:outline-none focus:border-[#0A868C] placeholder:text-[#87A09B]"
+              className="w-full pl-10 pr-9 py-2.5 rounded-xl border border-[#D4DDD9] text-xs sm:text-sm text-[#1A2E2C] focus:outline-none focus:border-[#0A868C] placeholder:text-[#87A09B]"
             />
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={() => setSearchTerm('')}
+                className="absolute right-2.5 top-2.5 p-1 rounded-lg text-[#87A09B] hover:text-[#1A2E2C] hover:bg-[#EFF4F2] cursor-pointer"
+                aria-label="Clear search"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
           </div>
 
           <div className="flex items-center gap-2">
@@ -285,16 +333,27 @@ export const ExploreView: React.FC<ExploreViewProps> = ({
       </div>
 
       {/* Results Header */}
-      <div className="flex items-center justify-between text-xs text-[#5B6E6A]">
+      <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#5B6E6A]">
         <span>Showing <strong>{filteredActivities.length}</strong> activities matching your filters</span>
-        {plannedIds.length > 0 && (
-          <button
-            onClick={() => onSelectTab('plan')}
-            className="text-[#0666A7] font-bold hover:underline cursor-pointer"
-          >
-            {plannedIds.length} item{plannedIds.length > 1 ? 's' : ''} in your Outing Plan →
-          </button>
-        )}
+        <div className="flex items-center gap-4">
+          {likedIds.length > 0 && (
+            <button
+              onClick={() => onSelectTab('saved')}
+              className="text-[#B57F6C] font-bold hover:underline cursor-pointer flex items-center gap-1"
+            >
+              <Heart className="w-3.5 h-3.5 fill-[#B57F6C]" />
+              <span>{likedIds.length} saved for later →</span>
+            </button>
+          )}
+          {plannedIds.length > 0 && (
+            <button
+              onClick={() => onSelectTab('plan')}
+              className="text-[#0666A7] font-bold hover:underline cursor-pointer"
+            >
+              {plannedIds.length} item{plannedIds.length > 1 ? 's' : ''} in Cost Calculator →
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Activities Grid */}
@@ -318,6 +377,7 @@ export const ExploreView: React.FC<ExploreViewProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredActivities.map((act) => {
             const isPlanned = plannedIds.includes(act.id);
+            const isLiked = likedIds.includes(act.id);
             return (
               <div
                 key={act.id}
@@ -342,15 +402,15 @@ export const ExploreView: React.FC<ExploreViewProps> = ({
 
                     <div className="absolute top-3 right-3">
                       <button
-                        onClick={() => onTogglePlanActivity(act)}
+                        onClick={() => onToggleLikeActivity(act)}
                         className={`p-1.5 rounded-full transition-colors cursor-pointer ${
-                          isPlanned
+                          isLiked
                             ? 'bg-[#D0A18F] text-[#1A2E2C]'
                             : 'bg-black/40 hover:bg-black/60 text-white'
                         }`}
-                        title={isPlanned ? 'Remove from Outing Plan' : 'Add to Outing Plan'}
+                        title={isLiked ? 'Remove from Saved Places' : 'Save for Future Reference'}
                       >
-                        <Heart className={`w-4 h-4 ${isPlanned ? 'fill-[#1A2E2C]' : ''}`} />
+                        <Heart className={`w-4 h-4 ${isLiked ? 'fill-[#1A2E2C]' : ''}`} />
                       </button>
                     </div>
 
@@ -372,15 +432,15 @@ export const ExploreView: React.FC<ExploreViewProps> = ({
                         {act.categoryLabel}
                       </span>
                       <button
-                        onClick={() => onTogglePlanActivity(act)}
+                        onClick={() => onToggleLikeActivity(act)}
                         className={`p-1.5 rounded-full transition-colors cursor-pointer ${
-                          isPlanned
+                          isLiked
                             ? 'bg-[#D0A18F] text-[#1A2E2C]'
                             : 'bg-[#EFF4F2] hover:bg-[#D4DDD9] text-[#475E5A]'
                         }`}
-                        title={isPlanned ? 'Remove from Outing Plan' : 'Add to Outing Plan'}
+                        title={isLiked ? 'Remove from Saved Places' : 'Save for Future Reference'}
                       >
-                        <Heart className={`w-4 h-4 ${isPlanned ? 'fill-[#1A2E2C]' : ''}`} />
+                        <Heart className={`w-4 h-4 ${isLiked ? 'fill-[#1A2E2C]' : ''}`} />
                       </button>
                     </div>
                   )}

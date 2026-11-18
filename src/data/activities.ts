@@ -3,8 +3,29 @@ import oceanBeachImg from '../assets/images/nature_ocean_beach_1794200740223.jpg
 import waterfallImg from '../assets/images/nature_waterfall_gully_1794200739732.jpg';
 import forestImg from '../assets/images/nature_eucalyptus_forest_1794200740842.jpg';
 import botanicTreesImg from '../assets/images/nature_botanic_trees_1794200741131.jpg';
+import artGalleryImg from '../assets/images/loc_art_gallery_1795019741417.jpg';
+import riverTorrensImg from '../assets/images/loc_river_torrens_1795019741268.jpg';
+import centralMarketImg from '../assets/images/loc_central_market_1795019742676.jpg';
+import hallettCoveImg from '../assets/images/loc_hallett_cove_1795019743842.jpg';
+import himejiGardenImg from '../assets/images/loc_himeji_garden_1795019744743.jpg';
+import portAdelaideImg from '../assets/images/loc_port_adelaide_1795019743971.jpg';
+import mortlockLibraryImg from '../assets/images/loc_mortlock_library_1795019744906.jpg';
+import northAdelaideImg from '../assets/images/loc_north_adelaide_1795019745509.jpg';
 
-export { oceanBeachImg, waterfallImg, forestImg, botanicTreesImg };
+export {
+  oceanBeachImg,
+  waterfallImg,
+  forestImg,
+  botanicTreesImg,
+  artGalleryImg,
+  riverTorrensImg,
+  centralMarketImg,
+  hallettCoveImg,
+  himejiGardenImg,
+  portAdelaideImg,
+  mortlockLibraryImg,
+  northAdelaideImg
+};
 
 export const ACTIVITIES: Activity[] = [
   {
@@ -49,6 +70,7 @@ export const ACTIVITIES: Activity[] = [
     description: 'Home to over 45,000 works of Australian, Indigenous, European, and Asian art spanning antiquity to contemporary masterpieces.',
     highlightTag: 'Free Wi-Fi & Culture',
     featured: true,
+    imageSrc: artGalleryImg,
     address: 'North Terrace, Adelaide SA 5000',
     nearbyFood: 'Uni of Adelaide Hub food court or Rundle Mall food courts',
     socialVibe: 'both',
@@ -72,6 +94,7 @@ export const ACTIVITIES: Activity[] = [
     description: 'Scenic riverbank trails lined with weeping willows, eucalyptus trees, illuminated bridges, and views of the historic Adelaide Oval.',
     highlightTag: 'Scenic Walk & Sunsets',
     featured: true,
+    imageSrc: riverTorrensImg,
     address: 'Elder Park / King William Rd, Adelaide SA 5000',
     nearbyFood: 'Festival Plaza cafes or bring a cheap picnic from Coles Rundle Mall',
     socialVibe: 'both',
@@ -95,6 +118,7 @@ export const ACTIVITIES: Activity[] = [
     description: 'Operating since 1869, this vibrant indoor market boasts over 70 multicultural stalls featuring artisanal cheeses, fresh South Australian produce, dumplings, and baked goods.',
     highlightTag: 'Student Grocery Hack',
     featured: true,
+    imageSrc: centralMarketImg,
     address: '44-60 Gouger St, Adelaide SA 5000',
     nearbyFood: 'Lucia’s Pizza, Chinatown food courts, Les Deux Coqs',
     socialVibe: 'social_meetup',
@@ -166,6 +190,7 @@ export const ACTIVITIES: Activity[] = [
     description: 'A spectacular cliff-top coastal boardwalk featuring ancient geological amphitheatres, rock pools, and panoramic ocean views across Gulf St Vincent.',
     highlightTag: 'Epic Ocean Hike',
     featured: true,
+    imageSrc: hallettCoveImg,
     address: 'Heron Way, Hallett Cove SA 5158',
     nearbyFood: 'Boatshed Cafe Hallett Cove or pack trail snacks'
   },
@@ -187,6 +212,7 @@ export const ACTIVITIES: Activity[] = [
     description: 'A tranquil Japanese garden designed in traditional classical styles with stepping stones, raked gravel dry gardens, water lilies, and pine trees.',
     highlightTag: 'Quiet Study Break',
     featured: false,
+    imageSrc: himejiGardenImg,
     address: 'South Terrace, Adelaide SA 5000',
     nearbyFood: 'Cafes on Hutt Street (5 mins walk)'
   },
@@ -230,6 +256,7 @@ export const ACTIVITIES: Activity[] = [
     description: 'Historic maritime wharves with bluestone pubs, gigantic international Wonderwalls murals on 19th-century warehouses, lighthouse views, and resident wild river dolphins.',
     highlightTag: 'Wild Dolphins for Free',
     featured: false,
+    imageSrc: portAdelaideImg,
     address: 'Commercial Rd & Wharf, Port Adelaide SA 5015',
     nearbyFood: 'Port Admiral Hotel, local bakeries on St Vincent St'
   },
@@ -251,6 +278,7 @@ export const ACTIVITIES: Activity[] = [
     description: 'A 19th-century Victorian interior with two tiers of ornate iron balustrades, leather-bound books, vintage clocks, and peaceful study desks.',
     highlightTag: 'Must-See Photo Spot',
     featured: false,
+    imageSrc: mortlockLibraryImg,
     address: 'North Terrace, Adelaide SA 5000',
     nearbyFood: 'Rundle Mall food courts or Adelaide Uni Hub'
   },
@@ -294,6 +322,7 @@ export const ACTIVITIES: Activity[] = [
     description: 'Victorian-era mansions, lush heritage gardens, stone churches, tree-lined avenues, and easy access to North Adelaide’s famous bakery strip.',
     highlightTag: 'Free Connector Bus',
     featured: false,
+    imageSrc: northAdelaideImg,
     address: 'O’Connell St & Brougham Place, North Adelaide SA 5006',
     nearbyFood: 'Bakery on O’Connell (open 24/7), Da-Klin Thai'
   }

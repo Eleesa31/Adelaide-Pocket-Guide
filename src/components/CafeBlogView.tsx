@@ -12,7 +12,8 @@ import {
   MapPin,
   Clock,
   DollarSign,
-  Calculator
+  Calculator,
+  Heart
 } from 'lucide-react';
 import { FoodSpot } from '../types';
 import {
@@ -24,14 +25,18 @@ import {
 
 interface CafeBlogViewProps {
   plannedIds: string[];
+  likedIds: string[];
   onTogglePlanFood: (food: FoodSpot) => void;
+  onToggleLikeFood: (food: FoodSpot) => void;
   onBackToDirectory: () => void;
   onSelectTab: (tab: string) => void;
 }
 
 export const CafeBlogView: React.FC<CafeBlogViewProps> = ({
   plannedIds,
+  likedIds,
   onTogglePlanFood,
+  onToggleLikeFood,
   onBackToDirectory,
   onSelectTab
 }) => {
@@ -94,6 +99,7 @@ Finding a budget-friendly cafe near campus with fast Wi-Fi, affordable food, and
 
   const renderCafeFeatureCard = (food: FoodSpot, highlightNote: string) => {
     const isPlanned = plannedIds.includes(food.id);
+    const isLiked = likedIds.includes(food.id);
     return (
       <div
         key={food.id}
@@ -140,26 +146,41 @@ Finding a budget-friendly cafe near campus with fast Wi-Fi, affordable food, and
             Best order: <strong className="text-[#1A2E2C]">{food.popularItem}</strong>{' '}
             <span className="font-mono tabular-nums text-[#0A868C]">(${food.popularItemPrice.toFixed(2)})</span>
           </span>
-          <button
-            onClick={() => onTogglePlanFood(food)}
-            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
-              isPlanned
-                ? 'bg-[#FBF4F1] text-[#B57F6C] border border-[#D0A18F]'
-                : 'bg-[#0A868C] hover:bg-[#076E73] text-white'
-            }`}
-          >
-            {isPlanned ? (
-              <>
-                <Check className="w-3.5 h-3.5" />
-                <span>Added to Plan</span>
-              </>
-            ) : (
-              <>
-                <Plus className="w-3.5 h-3.5" />
-                <span>Add to Outing Plan</span>
-              </>
-            )}
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={() => onToggleLikeFood(food)}
+              className={`px-3 py-2 rounded-xl text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer border ${
+                isLiked
+                  ? 'bg-[#FBF4F1] border-[#D0A18F] text-[#B57F6C]'
+                  : 'bg-[#EFF4F2] border-[#D4DDD9] text-[#475E5A] hover:bg-[#D4DDD9]'
+              }`}
+              title={isLiked ? 'Remove from Saved Places' : 'Save for Future Reference'}
+              aria-label={isLiked ? `Remove ${food.name} from Saved Places` : `Save ${food.name} for Future Reference`}
+            >
+              <Heart className={`w-3.5 h-3.5 ${isLiked ? 'fill-[#B57F6C]' : ''}`} />
+              <span>{isLiked ? 'Saved' : 'Save'}</span>
+            </button>
+            <button
+              onClick={() => onTogglePlanFood(food)}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
+                isPlanned
+                  ? 'bg-[#FBF4F1] text-[#B57F6C] border border-[#D0A18F]'
+                  : 'bg-[#0A868C] hover:bg-[#076E73] text-white'
+              }`}
+            >
+              {isPlanned ? (
+                <>
+                  <Check className="w-3.5 h-3.5" />
+                  <span>Added to Plan</span>
+                </>
+              ) : (
+                <>
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Add to Outing Plan</span>
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </div>
     );

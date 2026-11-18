@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Search, 
   Sparkles, 
@@ -11,7 +11,8 @@ import {
   Calculator, 
   GraduationCap, 
   Clock,
-  DollarSign
+  DollarSign,
+  X
 } from 'lucide-react';
 import { Activity } from '../types';
 import { 
@@ -19,31 +20,40 @@ import {
   oceanBeachImg, 
   waterfallImg, 
   forestImg, 
-  botanicTreesImg 
+  botanicTreesImg,
+  riverTorrensImg
 } from '../data/activities';
+import { FOOD_PLACES } from '../data/foodPlaces';
 
 interface HomeViewProps {
   onSelectTab: (tab: string) => void;
   onOpenActivity: (activity: Activity) => void;
   onFilterBudget: (budgetMax: number) => void;
+  onSearch: (query: string, forceTarget?: 'explore' | 'food') => void;
   plannedIds: string[];
   onTogglePlanActivity: (activity: Activity) => void;
+  likedIds: string[];
+  onToggleLikeActivity: (activity: Activity) => void;
 }
 
 export const HomeView: React.FC<HomeViewProps> = ({
   onSelectTab,
   onOpenActivity,
   onFilterBudget,
+  onSearch,
   plannedIds,
-  onTogglePlanActivity
+  onTogglePlanActivity,
+  likedIds,
+  onToggleLikeActivity
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchFocused, setSearchFocused] = useState(false);
 
-  // Top 3 hand-picked favorites with real photography
+  // Top 3 hand-picked city/cultural favorites with distinct photography
   const topThreeActivities = [
-    ACTIVITIES.find(a => a.id === 'glenelg-beach-sunset') || ACTIVITIES[0],
-    ACTIVITIES.find(a => a.id === 'waterfall-gully-falls') || ACTIVITIES[1],
-    ACTIVITIES.find(a => a.id === 'botanic-gardens') || ACTIVITIES[2],
+    ACTIVITIES.find(a => a.id === 'art-gallery-sa') || ACTIVITIES[1],
+    ACTIVITIES.find(a => a.id === 'river-torrens-walk') || ACTIVITIES[2],
+    ACTIVITIES.find(a => a.id === 'central-market') || ACTIVITIES[3],
   ];
 
   const natureSpotcards = [
@@ -89,10 +99,40 @@ export const HomeView: React.FC<HomeViewProps> = ({
     }
   ];
 
+  const liveMatches = useMemo(() => {
+    const q = searchTerm.trim().toLowerCase();
+    if (q.length < 2) return { activities: [], foods: [] };
+
+    const activities = ACTIVITIES.filter((act) =>
+      act.title.toLowerCase().includes(q) ||
+      act.categoryLabel.toLowerCase().includes(q) ||
+      act.description.toLowerCase().includes(q) ||
+      act.locationName.toLowerCase().includes(q) ||
+      act.studentTip.toLowerCase().includes(q) ||
+      act.transitSummary.toLowerCase().includes(q) ||
+      (act.highlightTag && act.highlightTag.toLowerCase().includes(q))
+    );
+
+    const foods = FOOD_PLACES.filter((food) =>
+      food.name.toLowerCase().includes(q) ||
+      food.cuisine.toLowerCase().includes(q) ||
+      food.popularItem.toLowerCase().includes(q) ||
+      food.address.toLowerCase().includes(q) ||
+      food.description.toLowerCase().includes(q) ||
+      (food.studentDeal ? food.studentDeal.toLowerCase().includes(q) : false)
+    );
+
+    return { activities, foods };
+  }, [searchTerm]);
+
+  const hasLiveQuery = searchTerm.trim().length >= 2;
+  const totalLiveCount = liveMatches.activities.length + liveMatches.foods.length;
+
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      onSelectTab('explore');
+      setSearchFocused(false);
+      onSearch(searchTerm.trim());
     }
   };
 
@@ -116,49 +156,171 @@ export const HomeView: React.FC<HomeViewProps> = ({
   return (
     <div className="space-y-12 sm:space-y-16 pb-16">
       
-      {/* Hero Section: Fresh, Calming Teal & Sage Tints */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#E6F3F4] via-[#EFF4F2] to-[#F7F9F8] border-b border-[#D4DDD9] pt-8 sm:pt-14 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center space-y-6">
+      {/* Hero Section: Crisp River Torrens Skyline Backdrop with High Contrast */}
+      <section className="relative border-b border-[#D4DDD9] pt-10 sm:pt-16 pb-14 sm:pb-20 px-4 sm:px-6 lg:px-8">
+        <div className="absolute inset-0 overflow-hidden bg-[#122625]">
+          <img
+            src={riverTorrensImg}
+            alt="River Torrens golden hour sunset and Adelaide Oval skyline"
+            className="w-full h-full object-cover object-center"
+            referrerPolicy="no-referrer"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0A201F]/65 via-[#0A201F]/45 to-[#0A201F]/75" />
+        </div>
+
+        <div className="relative z-10 max-w-4xl mx-auto text-center space-y-6">
           
           {/* Subtle Audience Tag */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-[#0A868C] border border-[#87A09B]/40 shadow-xs">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/95 text-[#0A868C] border border-white/60 shadow-sm">
             <span className="w-2 h-2 rounded-full bg-[#0A868C] animate-pulse" />
             <span>Adelaide International Student Pocket Guide</span>
           </div>
 
           {/* Simple, welcoming headline */}
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-[#1A2E2C] tracking-tight leading-tight">
-            Explore Adelaide <span className="text-[#0A868C]">affordably</span> and with total confidence.
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight drop-shadow-sm">
+            Explore Adelaide <span className="text-[#D0A18F]">affordably</span> and with total confidence.
           </h1>
 
           {/* Short, reassuring subtitle */}
-          <p className="text-sm sm:text-base text-[#475E5A] max-w-2xl mx-auto leading-relaxed font-normal">
+          <p className="text-sm sm:text-base text-white/90 max-w-2xl mx-auto leading-relaxed font-normal drop-shadow-xs">
             Your simple, stress-free guide to free cultural activities, student food deals, transparent public transport, and making friends in South Australia.
           </p>
 
-          {/* Clean Search Bar with Deep Teal Focus */}
-          <form onSubmit={handleSearchSubmit} className="pt-2 max-w-xl mx-auto">
-            <div className="relative flex items-center bg-white rounded-2xl p-1.5 shadow-xs border border-[#87A09B]/40 hover:border-[#0A868C] transition-colors">
-              <Search className="w-5 h-5 text-[#87A09B] ml-3 shrink-0" />
-              <input
-                type="text"
-                placeholder="Search activities, cheap eats, tram stops..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-3 py-2 text-xs sm:text-sm text-[#1A2E2C] bg-transparent focus:outline-none placeholder:text-[#87A09B]"
-              />
-              <button
-                type="submit"
-                className="px-4 py-2 rounded-xl bg-[#0A868C] hover:bg-[#076E73] text-white font-bold text-xs sm:text-sm shrink-0 transition-colors shadow-xs cursor-pointer"
-              >
-                Search
-              </button>
-            </div>
-          </form>
+          {/* Clean Search Bar with Live Dropdown across Activities & Cafes */}
+          <div className="pt-2 max-w-xl mx-auto relative">
+            <form onSubmit={handleSearchSubmit}>
+              <div className="relative flex items-center bg-white rounded-2xl p-1.5 shadow-lg border border-white/80 focus-within:ring-2 focus-within:ring-[#0A868C] transition-all">
+                <Search className="w-5 h-5 text-[#87A09B] ml-3 shrink-0" />
+                <input
+                  type="text"
+                  placeholder="Try searching 'beach', 'cafe', 'waterfall', 'mamak'..."
+                  value={searchTerm}
+                  onFocus={() => setSearchFocused(true)}
+                  onBlur={() => setTimeout(() => setSearchFocused(false), 180)}
+                  onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                    setSearchFocused(true);
+                  }}
+                  className="w-full px-3 py-2 text-xs sm:text-sm text-[#1A2E2C] bg-transparent focus:outline-none placeholder:text-[#87A09B]"
+                />
+                {searchTerm && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchTerm('')}
+                    className="p-1.5 text-[#87A09B] hover:text-[#1A2E2C] cursor-pointer"
+                    aria-label="Clear search"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded-xl bg-[#0A868C] hover:bg-[#076E73] text-white font-bold text-xs sm:text-sm shrink-0 transition-colors shadow-xs cursor-pointer"
+                >
+                  Search
+                </button>
+              </div>
+            </form>
+
+            {/* Instant Search Suggestions Dropdown */}
+            {searchFocused && hasLiveQuery && (
+              <div className="absolute left-0 right-0 mt-2 bg-white rounded-2xl border border-[#D4DDD9] shadow-2xl text-left overflow-hidden z-30 max-h-80 overflow-y-auto">
+                {totalLiveCount === 0 ? (
+                  <div className="p-4 text-center text-xs text-[#5B6E6A]">
+                    No exact matches for "<strong>{searchTerm}</strong>". Try "beach", "cafe", "waterfall", or "dumplings".
+                  </div>
+                ) : (
+                  <div className="divide-y divide-[#EFF4F2]">
+                    {liveMatches.activities.length > 0 && (
+                      <div className="p-2.5 space-y-1">
+                        <div className="px-2 py-1 flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-[#0A868C]">
+                          <span>Activities & Places ({liveMatches.activities.length})</span>
+                          <button
+                            type="button"
+                            onMouseDown={() => onSearch(searchTerm.trim(), 'explore')}
+                            className="hover:underline cursor-pointer"
+                          >
+                            View all in Explore →
+                          </button>
+                        </div>
+                        {liveMatches.activities.slice(0, 3).map((act) => (
+                          <button
+                            key={act.id}
+                            type="button"
+                            onMouseDown={() => {
+                              setSearchFocused(false);
+                              onOpenActivity(act);
+                            }}
+                            className="w-full flex items-center gap-3 p-2 rounded-xl hover:bg-[#EFF4F2] transition-colors text-left cursor-pointer"
+                          >
+                            {act.imageSrc && (
+                              <img
+                                src={act.imageSrc}
+                                alt={act.title}
+                                className="w-10 h-10 rounded-lg object-cover shrink-0"
+                                referrerPolicy="no-referrer"
+                              />
+                            )}
+                            <div className="min-w-0 flex-1">
+                              <span className="block text-xs font-bold text-[#1A2E2C] truncate">{act.title}</span>
+                              <span className="block text-[11px] text-[#5B6E6A] truncate">
+                                {act.locationName} · {act.costDescription}
+                              </span>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    {liveMatches.foods.length > 0 && (
+                      <div className="p-2.5 space-y-1">
+                        <div className="px-2 py-1 flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-[#B57F6C]">
+                          <span>Cafes &amp; Cheap Eats ({liveMatches.foods.length})</span>
+                          <button
+                            type="button"
+                            onMouseDown={() => onSearch(searchTerm.trim(), 'food')}
+                            className="hover:underline cursor-pointer"
+                          >
+                            View all in Food &amp; Cafes →
+                          </button>
+                        </div>
+                        {liveMatches.foods.slice(0, 3).map((food) => (
+                          <button
+                            key={food.id}
+                            type="button"
+                            onMouseDown={() => {
+                              setSearchFocused(false);
+                              onSearch(food.name, 'food');
+                            }}
+                            className="w-full flex items-center gap-3 p-2 rounded-xl hover:bg-[#FBF4F1] transition-colors text-left cursor-pointer"
+                          >
+                            {food.imageSrc && (
+                              <img
+                                src={food.imageSrc}
+                                alt={food.name}
+                                className="w-10 h-10 rounded-lg object-cover shrink-0"
+                                referrerPolicy="no-referrer"
+                              />
+                            )}
+                            <div className="min-w-0 flex-1">
+                              <span className="block text-xs font-bold text-[#1A2E2C] truncate">{food.name}</span>
+                              <span className="block text-[11px] text-[#5B6E6A] truncate">
+                                {food.cuisine} · ~${food.estimatedMealCost.toFixed(2)} AUD
+                              </span>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
 
           {/* Quick Suggested Topic Chips */}
           <div className="flex flex-wrap items-center justify-center gap-2 pt-1 text-xs">
-            <span className="text-[#6C827E] font-medium">Popular:</span>
+            <span className="text-white/90 font-semibold">Popular:</span>
             {[
               { label: '🚋 Free Tram Zone', tag: 'Free Tram' },
               { label: '☕ Study & Cat Cafes Blog', tag: 'Cafe Blog' },
@@ -170,7 +332,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 key={chip.label}
                 type="button"
                 onClick={() => handleQuickTagClick(chip.tag)}
-                className="px-3 py-1 rounded-full bg-white hover:bg-[#E6F3F4] text-[#2D4543] hover:text-[#0A868C] border border-[#87A09B]/40 transition-colors font-medium text-[11px] cursor-pointer"
+                className="px-3 py-1 rounded-full bg-white/95 hover:bg-white text-[#1A2E2C] hover:text-[#0A868C] border border-white/60 transition-colors font-semibold text-[11px] shadow-xs cursor-pointer"
               >
                 {chip.label}
               </button>
@@ -184,7 +346,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 key={spot.id}
                 type="button"
                 onClick={() => onOpenActivity(spot.activity)}
-                className="group flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-white/90 hover:bg-white border border-[#D4DDD9] hover:border-[#0A868C] shadow-2xs hover:shadow-xs transition-all cursor-pointer text-left shrink-0"
+                className="group flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-white/95 hover:bg-white border border-white/70 hover:border-[#0A868C] shadow-sm transition-all cursor-pointer text-left shrink-0"
               >
                 <img
                   src={spot.img}
@@ -446,6 +608,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {topThreeActivities.map((act) => {
             const isPlanned = plannedIds.includes(act.id);
+            const isLiked = likedIds.includes(act.id);
             return (
               <div
                 key={act.id}
@@ -472,13 +635,13 @@ export const HomeView: React.FC<HomeViewProps> = ({
                       {act.categoryLabel}
                     </span>
                     <button
-                      onClick={() => onTogglePlanActivity(act)}
+                      onClick={() => onToggleLikeActivity(act)}
                       className={`p-1.5 rounded-full transition-colors cursor-pointer ${
-                        isPlanned ? 'bg-[#D0A18F] text-[#1A2E2C]' : 'bg-black/35 hover:bg-black/55 text-white'
+                        isLiked ? 'bg-[#D0A18F] text-[#1A2E2C]' : 'bg-black/35 hover:bg-black/55 text-white'
                       }`}
-                      title={isPlanned ? 'Remove from plan' : 'Add to plan'}
+                      title={isLiked ? 'Remove from Saved Places' : 'Save for Future Reference'}
                     >
-                      <Heart className={`w-3.5 h-3.5 ${isPlanned ? 'fill-[#1A2E2C]' : ''}`} />
+                      <Heart className={`w-3.5 h-3.5 ${isLiked ? 'fill-[#1A2E2C]' : ''}`} />
                     </button>
                   </div>
 

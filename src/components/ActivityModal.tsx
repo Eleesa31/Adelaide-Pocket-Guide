@@ -10,7 +10,8 @@ import {
   Plus, 
   Check, 
   Compass,
-  DollarSign
+  DollarSign,
+  Heart
 } from 'lucide-react';
 import { Activity } from '../types';
 
@@ -19,13 +20,17 @@ interface ActivityModalProps {
   onClose: () => void;
   isPlanned: boolean;
   onTogglePlan: (activity: Activity) => void;
+  isLiked: boolean;
+  onToggleLike: (activity: Activity) => void;
 }
 
 export const ActivityModal: React.FC<ActivityModalProps> = ({
   activity,
   onClose,
   isPlanned,
-  onTogglePlan
+  onTogglePlan,
+  isLiked,
+  onToggleLike
 }) => {
   if (!activity) return null;
 
@@ -222,26 +227,40 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({
               Back to List
             </button>
 
-            <button
-              onClick={() => onTogglePlan(activity)}
-              className={`w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer ${
-                isPlanned
-                  ? 'bg-[#FBF4F1] text-[#B57F6C] border border-[#D0A18F]'
-                  : 'bg-[#0A868C] hover:bg-[#076E73] text-white'
-              }`}
-            >
-              {isPlanned ? (
-                <>
-                  <Check className="w-4 h-4" />
-                  <span>In Your Outing Plan (Click to Remove)</span>
-                </>
-              ) : (
-                <>
-                  <Plus className="w-4 h-4" />
-                  <span>Add to My Outing Plan</span>
-                </>
-              )}
-            </button>
+            <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
+              <button
+                onClick={() => onToggleLike(activity)}
+                className={`w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 border transition-colors cursor-pointer ${
+                  isLiked
+                    ? 'bg-[#D0A18F] border-[#D0A18F] text-[#1A2E2C]'
+                    : 'bg-[#FBF4F1] border-[#D0A18F]/50 text-[#1A2E2C] hover:bg-[#D0A18F]/30'
+                }`}
+              >
+                <Heart className={`w-4 h-4 ${isLiked ? 'fill-[#1A2E2C]' : 'text-[#B57F6C]'}`} />
+                <span>{isLiked ? 'Saved' : 'Save for Later'}</span>
+              </button>
+
+              <button
+                onClick={() => onTogglePlan(activity)}
+                className={`w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer ${
+                  isPlanned
+                    ? 'bg-[#FBF4F1] text-[#B57F6C] border border-[#D0A18F]'
+                    : 'bg-[#0A868C] hover:bg-[#076E73] text-white'
+                }`}
+              >
+                {isPlanned ? (
+                  <>
+                    <Check className="w-4 h-4" />
+                    <span>In Cost Calculator</span>
+                  </>
+                ) : (
+                  <>
+                    <Plus className="w-4 h-4" />
+                    <span>+ Add to Cost Calculator</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
 
         </div>

@@ -108,3 +108,16 @@ export interface PreMadeItinerary {
     transitNote?: string;
   }>;
 }
+
+export interface LikedItem {
+  id: string;
+  type: 'activity' | 'food';
+  title: string;
+  subtitle: string;
+  costLabel: string;
+  costValue: number;
+  locationName: string;
+  transitSummary: string;
+  imageSrc?: string;
+  savedAt: number;
+}

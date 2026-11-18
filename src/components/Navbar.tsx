@@ -9,16 +9,18 @@ import {
   Menu, 
   X, 
   Sparkles, 
-  Bus
+  Bus,
+  Heart
 } from 'lucide-react';
 
 interface NavbarProps {
   currentTab: string;
   onSelectTab: (tab: string) => void;
   plannedCount: number;
+  likedCount: number;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ currentTab, onSelectTab, plannedCount }) => {
+export const Navbar: React.FC<NavbarProps> = ({ currentTab, onSelectTab, plannedCount, likedCount }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
@@ -57,21 +59,16 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, onSelectTab, planned
           {/* Logo & Brand */}
           <button 
             onClick={() => handleNavClick('home')}
-            className="flex items-center gap-3 text-left focus:outline-none group cursor-pointer"
+            className="flex items-center gap-3 text-left focus:outline-none group cursor-pointer shrink-0"
           >
-            <div className="w-10 h-10 rounded-xl bg-[#0A868C] text-white flex items-center justify-center font-bold shadow-xs group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 rounded-xl bg-[#0A868C] text-white flex items-center justify-center font-bold shadow-xs group-hover:scale-105 transition-transform shrink-0">
               <Bus className="w-5 h-5 text-white" />
             </div>
             <div>
-              <div className="flex items-center gap-1.5">
-                <span className="text-base sm:text-lg font-bold tracking-tight text-[#1A2E2C] group-hover:text-[#0A868C] transition-colors">
-                  Adelaide Pocket Guide
-                </span>
-                <span className="hidden md:inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-[#EFF4F2] text-[#3D5B55] border border-[#87A09B]/40">
-                  Student Companion
-                </span>
-              </div>
-              <p className="text-[11px] text-[#5B6E6A] hidden sm:block">
+              <span className="text-base sm:text-lg font-bold tracking-tight text-[#1A2E2C] group-hover:text-[#0A868C] transition-colors whitespace-nowrap block">
+                Adelaide Pocket Guide
+              </span>
+              <p className="text-[11px] text-[#5B6E6A] hidden sm:block whitespace-nowrap">
                 Affordable • Confident • Independent
               </p>
             </div>
@@ -86,13 +83,13 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, onSelectTab, planned
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`relative flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+                  className={`relative flex items-center gap-1.5 px-2.5 xl:px-3.5 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
                     isActive
                       ? 'bg-[#0A868C] text-white shadow-xs'
                       : 'text-[#3E5552] hover:text-[#0A868C] hover:bg-[#EFF4F2]'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[#87A09B]'}`} />
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-[#87A09B]'}`} />
                   <span>{item.label}</span>
                   {item.badge !== undefined && (
                     <span className={`px-1.5 py-0.2 rounded-full text-[11px] font-bold ${
@@ -107,7 +104,25 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, onSelectTab, planned
           </nav>
 
           {/* CTA & Mobile Toggle */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-2.5">
+            <button
+              onClick={() => handleNavClick('saved')}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border transition-colors cursor-pointer ${
+                currentTab === 'saved'
+                  ? 'bg-[#D0A18F] border-[#D0A18F] text-[#1A2E2C]'
+                  : 'bg-[#FBF4F1] hover:bg-[#D0A18F]/30 border-[#D0A18F]/50 text-[#1A2E2C]'
+              }`}
+              title="Saved Places for Future Reference"
+            >
+              <Heart className={`w-3.5 h-3.5 ${likedCount > 0 ? 'fill-[#B57F6C] text-[#B57F6C]' : 'text-[#B57F6C]'}`} />
+              <span className="hidden sm:inline">Saved</span>
+              {likedCount > 0 && (
+                <span className="bg-[#1A2E2C] text-white px-1.5 py-0.2 rounded-full text-[10px] font-black font-mono tabular-nums">
+                  {likedCount}
+                </span>
+              )}
+            </button>
+
             <button
               onClick={() => handleNavClick('plan')}
               className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-[#0666A7] hover:bg-[#05548A] text-white shadow-xs transition-colors cursor-pointer"
@@ -115,7 +130,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, onSelectTab, planned
               <Sparkles className="w-3.5 h-3.5 text-[#D0A18F]" />
               <span>Cost Calculator</span>
               {plannedCount > 0 && (
-                <span className="bg-[#D0A18F] text-[#1A2E2C] px-1.5 py-0.2 rounded-full text-[10px] font-black">
+                <span className="bg-[#D0A18F] text-[#1A2E2C] px-1.5 py-0.2 rounded-full text-[10px] font-black font-mono tabular-nums">
                   {plannedCount}
                 </span>
               )}
@@ -165,6 +180,24 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, onSelectTab, planned
               </button>
             );
           })}
+          <button
+            onClick={() => handleNavClick('saved')}
+            className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors cursor-pointer ${
+              currentTab === 'saved'
+                ? 'bg-[#D0A18F] text-[#1A2E2C] font-bold'
+                : 'text-[#3E5552] hover:bg-[#FBF4F1]'
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <Heart className="w-4 h-4 text-[#B57F6C]" />
+              <span>Saved Places</span>
+            </div>
+            {likedCount > 0 && (
+              <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-[#1A2E2C] text-white">
+                {likedCount}
+              </span>
+            )}
+          </button>
         </div>
       )}
     </header>

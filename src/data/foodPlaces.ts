@@ -2,8 +2,26 @@ import { FoodSpot } from '../types';
 import cafeStudyHeroImg from '../assets/images/cafe_study_laptop_hero_1794821691370.jpg';
 import cafeBreakfastImg from '../assets/images/cafe_budget_breakfast_1794821692547.jpg';
 import cafeCatLoungeImg from '../assets/images/cafe_cat_lounge_1794821692605.jpg';
+import mamakCornerImg from '../assets/images/food_mamak_corner_1795019768339.jpg';
+import chinatownPlazaImg from '../assets/images/food_chinatown_plaza_1795019768798.jpg';
+import luciasPizzaImg from '../assets/images/food_lucias_pizza_1795019768985.jpg';
+import mandooDumplingsImg from '../assets/images/food_mandoo_dumplings_1795019770247.jpg';
+import lawashKebabImg from '../assets/images/food_lawash_kebab_1795019770333.jpg';
+import honkiTonkImg from '../assets/images/food_honki_tonk_1795019771478.jpg';
+import gelatoGlenelgImg from '../assets/images/food_gelato_glenelg_1795019772216.jpg';
 
-export { cafeStudyHeroImg, cafeBreakfastImg, cafeCatLoungeImg };
+export {
+  cafeStudyHeroImg,
+  cafeBreakfastImg,
+  cafeCatLoungeImg,
+  mamakCornerImg,
+  chinatownPlazaImg,
+  luciasPizzaImg,
+  mandooDumplingsImg,
+  lawashKebabImg,
+  honkiTonkImg,
+  gelatoGlenelgImg
+};
 
 export const FOOD_PLACES: FoodSpot[] = [
   {
@@ -41,6 +59,7 @@ export const FOOD_PLACES: FoodSpot[] = [
     dietaryNotes: ['Halal certified stalls', 'Vegetarian noodle dishes'],
     transitSummary: 'Free Tram to Victoria Square / Tarntanyangga stop. Walk 3 mins west to Chinatown Paifang gate.',
     openLate: true,
+    imageSrc: chinatownPlazaImg,
     studentVibe: 'Bustling, affordable, generous portions, authentic home-style Asian flavours.',
     description: 'Adelaide’s vibrant Chinatown center features indoor food courts, bubble tea shops, hot pot restaurants, and grocery supermarkets packed with student budget staples.',
     featured: true
@@ -59,6 +78,7 @@ export const FOOD_PLACES: FoodSpot[] = [
     dietaryNotes: ['Vegetarian pasta', 'Gluten-free pasta upon request'],
     transitSummary: 'Free Tram to Victoria Square stop. Inside Central Market Western Arcade.',
     openLate: false,
+    imageSrc: luciasPizzaImg,
     studentVibe: 'Adelaide history since 1957. Introduced pizza to Adelaide. Lively counter bar service.',
     description: 'The first place to serve pizza in South Australia. Still serving authentic, comforting tomato sauce, espresso, and crispy panini in the heart of the market.',
     featured: true
@@ -77,6 +97,7 @@ export const FOOD_PLACES: FoodSpot[] = [
     dietaryNotes: ['Vegetarian dumplings available'],
     transitSummary: 'Free Tram to Adelaide Railway Station stop. Walk 1 min into Bank Street.',
     openLate: false,
+    imageSrc: mandooDumplingsImg,
     studentVibe: 'Watch master chef hand-fold dumplings right behind the glass window while you queue.',
     description: 'Beloved Bank Street restaurant famous for freshly rolled handmade dumplings filled with juicy pork, beef, kimchi or vegetarian greens.',
     featured: false
@@ -95,6 +116,7 @@ export const FOOD_PLACES: FoodSpot[] = [
     dietaryNotes: ['Halal ingredients', 'Vegetarian Dhal'],
     transitSummary: 'Free Tram to Adelaide Railway Station stop, right on Bank Street near Hindley St.',
     openLate: true,
+    imageSrc: mamakCornerImg,
     studentVibe: 'Warm, spicy comfort food that tastes like home for Southeast Asian international students.',
     description: 'Crispy flaky roti made fresh on the griddle, aromatic nasi lemak, char kway teow, and iced Milo dinosaur at honest student-friendly prices.',
     featured: false
@@ -113,6 +135,7 @@ export const FOOD_PLACES: FoodSpot[] = [
     dietaryNotes: ['100% Halal Certified', 'Vegan Flatbreads'],
     transitSummary: 'Catch Bus 150 or 155 from North Terrace (~10 mins) or 15 mins bike ride from Adelaide CBD.',
     openLate: true,
+    imageSrc: lawashKebabImg,
     studentVibe: 'Unbeatable value for money. Huge portions of charcoal-grilled meats and pillowy bread.',
     description: 'Smoky charcoal aroma, giant clay tandoor ovens churning out fresh naan and lawash bread, and hearty plates of kebab that easily feed two students.',
     featured: false
@@ -131,6 +154,7 @@ export const FOOD_PLACES: FoodSpot[] = [
     dietaryNotes: ['Pork-free menu options'],
     transitSummary: 'Free Tram to City West or Railway Station stop. Located in Hindley Street.',
     openLate: true,
+    imageSrc: honkiTonkImg,
     studentVibe: 'Retro neon Hong Kong diner aesthetic, upbeat music, popular with UniSA City West students.',
     description: 'A punchy, neon-lit diner serving sizzling woks, tender roast meats, spicy Dan Dan noodles, and chilled Hong Kong milk tea.',
     featured: false
@@ -149,6 +173,7 @@ export const FOOD_PLACES: FoodSpot[] = [
     dietaryNotes: ['Vegan fruit sorbets', 'Dairy-free options', 'Gluten-free cones'],
     transitSummary: 'Glenelg Tram to Stop 16 (Jetty Road) or Stop 17 (Moseley Square).',
     openLate: true,
+    imageSrc: gelatoGlenelgImg,
     studentVibe: 'The quintessential seaside reward after an afternoon at Glenelg beach.',
     description: 'Crafted from fresh local South Australian Fleurieu milk, natural ingredients, and real roasted nuts. Considered by many locals as Adelaide’s best gelato.',
     featured: false
